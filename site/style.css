@@ -1,3 +1,23 @@
 body {
     background-image:url('blue-back.jpg');
 }
+
+h1 {
+    font-family:'andale mono', sans-serif;
+    font-size:xx-large;
+    color:#ffffff
+}
+iframe {
+    width: 1000px;
+    height: 435px;
+    frameborder: 0px;
+    scrolling: no;
+    margin: 0px;
+}
+
+div {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 90px;
+    width: 1000px;
+}
