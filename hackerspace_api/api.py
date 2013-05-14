@@ -102,4 +102,6 @@ def list_hackerspaces():
 if __name__ == '__main__':
     file_path = os.path.join(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))), "site/list")
     with open(file_path, 'w') as f:
-        json.dumps(list_hackerspaces(), f)
+        hs = list_hackerspaces()
+        print(hs)
+        json.dump(hs, f)
