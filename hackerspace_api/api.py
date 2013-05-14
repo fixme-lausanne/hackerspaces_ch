@@ -14,6 +14,8 @@ non_numeric = re.compile('[^,\d.]+')
 BASE_URL = "http://hackerspaces.org"
 base_url = partial(urljoin, BASE_URL)
 SWISS_HS = "/wiki/switzerland"
+HS_URL = "http://hackerspaces.org/w/index.php?title={0}&action=edit"
+LOCATION_STRING = "coordinate"
 
 app = bottle.Bottle("hackerspace.ch")
 
@@ -52,8 +54,43 @@ def get_hackerspaces():
     links = tree.xpath('//*[@id="mw-content-text"]/table[2]//td//text()')
     hs_names = links[::2]
     coordinates = links[1::2]
-    clean_coordinates = map(lambda a: non_numeric.sub('', a), coordinates)
-    return dict(zip(hs_names, clean_coordinates))
+    hackerspaces = {}
+    for name in hs_names:
+        hackerspaces[name] = get_hackerspace(name)
+    return hackerspaces
+
+def get_hackerspace(name):
+    url = HS_URL.format(name)
+    resp = requests.get(url)
+    tree = etree.parse(io.StringIO(resp.text))
+    text_box = tree.xpath('//*[@id="wpTextbox1"]//text()')
+    text = "".join(text_box)
+    count = 0
+    result = ""
+    for char in text:
+        if char == '{':
+            count += 1
+        elif char == '}':
+            count -= 1
+            if count == 0 and result:
+                break
+        elif count == 2:
+            result += char
+    ret = {}
+    for kv in result.split("|"):
+        try:
+            k, v = map(lambda a: a.replace('\n', ' ').strip(), kv.split("="))
+            if k == LOCATION_STRING:
+                v = clean_location(v)
+            ret[k] = v
+        except ValueError:
+            pass
+    return ret
+
+def clean_location(location_string):
+    return non_numeric.sub('', location_string).split(",")
+
+
 
 @app.route('/list')
 def list_hackerspaces():
