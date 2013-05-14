@@ -13,16 +13,29 @@ function loadMarker(map, data) {
     $.each(data, function(key, value) {
         var size = new OpenLayers.Size(21,25);
         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-    //markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(0, 0),icon));
         var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png', size, offset);
         var position = value.coordinate;
         console.log(position);
-        var LonLat = new OpenLayers.LonLat( position[1],position[0])
+        var lonLat = new OpenLayers.LonLat( position[1],position[0])
        .transform(
            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
            map.getProjectionObject()); // to Spherical Mercator Projection
-
-        markers.addMarker(new OpenLayers.Marker(LonLat,icon));
+        marker = new OpenLayers.Marker(lonLat, icon)
+        markers.addMarker(marker);
+        var popup = new OpenLayers.Popup(key,
+                                lonLat,
+                                new OpenLayers.Size(200,200),
+                                JSON.stringify(value, null, '\t'), 
+                                true);
+        console.log("added popup");
+        marker.events.register("click", marker, function (e) {
+            map.addPopup(popup,true);
+            popup.show();
         });
+    });
     map.zoomToExtent(markers.getDataExtent())
+
 }
+
+function getClosest() {
+ }
