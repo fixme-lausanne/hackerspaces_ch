@@ -3,7 +3,7 @@ function loadmap(){
 
     //var source = Proj4js.Proj('EPSG:4236'); 
     map.addLayer(new OpenLayers.Layer.OSM());
-    $.getJSON('http://127.0.0.1:8080/list', function(data){loadMarker(map, data)})
+    $.getJSON('list', function(data){loadMarker(map, data)})
     map.zoomToMaxExtent();
 }
 
