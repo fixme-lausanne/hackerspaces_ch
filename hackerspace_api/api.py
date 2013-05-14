@@ -7,6 +7,9 @@ import bottle
 import functools
 from collections import namedtuple
 import time
+import re
+
+non_numeric = re.compile('[^,\d.]+')
 
 BASE_URL = "http://hackerspaces.org"
 base_url = partial(urljoin, BASE_URL)
@@ -47,7 +50,10 @@ def get_hackerspaces():
     resp = requests.get(base_url(SWISS_HS))
     tree = etree.parse(io.StringIO(resp.text))
     links = tree.xpath('//*[@id="mw-content-text"]/table[2]//td//text()')
-    return dict(zip(links[::2], links[1::2]))
+    hs_names = links[::2]
+    coordinates = links[1::2]
+    clean_coordinates = map(lambda a: non_numeric.sub('', a), coordinates)
+    return dict(zip(hs_names, clean_coordinates))
 
 @app.route('/list')
 def list_hackerspaces():
