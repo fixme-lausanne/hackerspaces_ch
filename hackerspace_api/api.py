@@ -18,6 +18,7 @@ base_url = partial(urljoin, BASE_URL)
 SWISS_HS = "/wiki/switzerland"
 HS_URL = "http://hackerspaces.org/w/index.php?title={0}&action=edit"
 LOCATION_STRING = "coordinate"
+SPACE_API = "http://openspace.slopjong.de/directory.json"
 
 app = bottle.Bottle("hackerspace.ch")
 
@@ -59,8 +60,14 @@ def get_hackerspaces():
     hackerspaces = {}
     for name in hs_names:
         hackerspaces[name] = get_hackerspace(name)
+        hackerspaces[name]['space_url'] = get_space_api_url(name)
     return hackerspaces
 
+def get_space_api_url(name):
+    req = requests.get(SPACE_API)
+    j = json.loads(req.text)
+    return j.get(name, '')
+    
 def get_hackerspace(name):
     url = HS_URL.format(name)
     resp = requests.get(url)
