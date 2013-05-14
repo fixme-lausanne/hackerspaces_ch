@@ -6,15 +6,15 @@
   "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
   <link rel="stylesheet" type="text/css" href="style.css" media="screen" /> 
   <link rel="shortcut icon" href="http://hackerspaces.org/favicon.ico" />
+  <script src="libs/OpenLayers.js"></script>
+  <script src="script/main.js"></script>
   <title>hackerspaces.ch</title>
-
 </head>
 
-<body>
-    <div>
+<body onload="loadmap()">
+    <div id="body-div">
         <h1>HACKERSPACES.CH</h1>
-        <iframe scrolling="no" src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=http://hackerspaces.ch/hackerspaces.kmz&amp;aq=&amp;sll=37.0625,-95.677068&amp;sspn=46.946584,93.076172&amp;ie=UTF8&amp;t=m&amp;ll=46.942762,7.745361&amp;spn=1.500142,5.487671&amp;z=8&amp;output=embed">
-        </iframe>
-    <div>
+        <div id="demoMap"></div>
+    </div>
 </body>
 </html>
