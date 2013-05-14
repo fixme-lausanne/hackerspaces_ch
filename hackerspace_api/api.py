@@ -3,26 +3,56 @@ import io
 import requests
 from urllib.parse import urljoin
 from functools import partial
+import bottle
+import functools
+from collections import namedtuple
+import time
 
 BASE_URL = "http://hackerspaces.org"
 base_url = partial(urljoin, BASE_URL)
 SWISS_HS = "/wiki/switzerland"
 
+app = bottle.Bottle("hackerspace.ch")
+
+CachedValue = namedtuple('CachedValue', ['time', 'value'])
+
+class Cache(object):
+    def __init__(self):
+        self.cache = {}
+
+    def cached(self, timeout):
+        def decorator(f):
+            def get_value(*args, **kwargs):
+                try:
+                    value = self.cache[f]
+                    if time.time() > (value.time + timeout):
+                        #too old 
+                        raise KeyError
+                except KeyError:
+                    value = CachedValue(time.time(), f(*args, **kwargs))
+                    self.cache[f] = value
+                return value.value
+
+            #the new function wrapped
+            @functools.wraps(f)
+            def decorated_function(*args, **kwargs):
+                return get_value(*args, **kwargs)
+            return decorated_function
+        return decorator
+
+cache = Cache()
+
+@cache.cached(timeout=60*60)
 def get_hackerspaces():
-    print(BASE_URL)
     resp = requests.get(base_url(SWISS_HS))
     tree = etree.parse(io.StringIO(resp.text))
-    links = tree.xpath('//div[@id="mw-content-text"]/table/tr/td[@width="50%"]/ul[1]/li/a/@href')
-    names = tree.xpath('//div[@id="mw-content-text"]/table/tr/td[@width="50%"]/ul[1]/li/a/text()')
-    links = map(base_url, links)
-    list(map(get_hackerspace, links))
+    links = tree.xpath('//*[@id="mw-content-text"]/table[2]//td//text()')
+    return dict(zip(links[::2], links[1::2]))
 
-def get_hackerspace(url):
-    resp = requests.get(url)
-    tree = etree.parse(io.StringIO(resp.text))
-    #parse the content
+@app.route('/list')
+def list_hackerspaces():
+    return get_hackerspaces()
 
 
-
-
-get_hackerspaces()
+if __name__ == '__main__':
+    app.run()
