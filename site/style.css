@@ -14,6 +14,7 @@ h1 {
     frameborder: 0px;
     scrolling: no;
     margin: 0px;
+    border-radius: 4px;
 }
 
 #body-div {
