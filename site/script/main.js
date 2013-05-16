@@ -12,7 +12,7 @@ function loadMarker(map, data) {
     $.each(data, function(key, value) {
         var size = new OpenLayers.Size(21,25);
         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-        var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png', size, offset);
+        var icon = new OpenLayers.Icon('icons/hs-map.png', size, offset);
         var position = value.coordinate;
         var lonLat = new OpenLayers.LonLat(position[1],position[0])
        .transform(
@@ -20,10 +20,11 @@ function loadMarker(map, data) {
            map.getProjectionObject()); // to Spherical Mercator Projection
         var marker = new OpenLayers.Marker(lonLat, icon)
         markersLayer.addMarker(marker);
+        var content = createContentFromJson(key, value)
         var popup = new OpenLayers.Popup.AnchoredBubble(key,
                                 lonLat,
                                 new OpenLayers.Size(200,200),
-                                JSON.stringify(value, null, '\t'), 
+                                content, 
                                 null,
                                 true);
         marker.events.register("click", marker, function (e) {
@@ -33,5 +34,13 @@ function loadMarker(map, data) {
     });
     map.zoomToExtent(markersLayer.getDataExtent())
 
+}
+
+function createContentFromJson(name, hs_data){
+    return name;
+}
+
+function getStatus(url, callback){
+    $.getJSON(url, callback)
 }
 
