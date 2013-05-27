@@ -1,32 +1,33 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-image:url('images/blue-back.jpg');
-	color:	white;
+    color: white;
     font-family:'andale mono', sans-serif;
 }
 
 h1 {
     font-size:xx-large;
+    margin-bottom: 20px;
+}
+
+#body-div {
+    margin: 10px 20px;
 }
 
 #demoMap {
-    width: 1000px;
-    height: 435px;
-    frameborder: 0px;
-    scrolling: no;
+    width: 100%;
+    height: 350px;
     margin: 0px;
     border-radius: 4px;
 }
 
-#body-div {
-    width: 50%;
-    margin: 0 auto;
-    margin-top: 90px;
-    width: 1000px;
-}
-
 #footer {
-	margin-top:	35px;
-	position:	absolute;
-	bottom:	20px;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
 }
 
