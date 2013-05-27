@@ -10,9 +10,9 @@ function loadMarker(map, data) {
     var markersLayer = new OpenLayers.Layer.Markers("Markers");
     map.addLayer(markersLayer);
     $.each(data, function(key, value) {
-        var size = new OpenLayers.Size(21,25);
+        var size = new OpenLayers.Size(25,25);
         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-        var icon = new OpenLayers.Icon('images/hs-map.png', size, offset);
+        var icon = new OpenLayers.Icon('images/hs-noinfo-marker.png', size, offset);
         var position = value.coordinate;
         var lonLat = new OpenLayers.LonLat(position[1],position[0])
        .transform(
