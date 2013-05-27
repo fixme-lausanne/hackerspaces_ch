@@ -1,8 +1,8 @@
 function loadmap(){
-    map = new OpenLayers.Map("demoMap")
+    map = new OpenLayers.Map("demoMap");
 
     map.addLayer(new OpenLayers.Layer.OSM());
-    $.getJSON('list', function(data){loadMarker(map, data)})
+    $.getJSON('list', function(data){loadMarker(map, data);});
     map.zoomToMaxExtent();
 }
 
@@ -15,12 +15,12 @@ function loadMarker(map, data) {
         var icon = new OpenLayers.Icon('images/hs-noinfo-marker.png', size, offset);
         var position = value.coordinate;
         var lonLat = new OpenLayers.LonLat(position[1],position[0])
-       .transform(
+        .transform(
            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
            map.getProjectionObject()); // to Spherical Mercator Projection
-        var marker = new OpenLayers.Marker(lonLat, icon)
+        var marker = new OpenLayers.Marker(lonLat, icon);
         markersLayer.addMarker(marker);
-        var content = createContentFromJson(key, value)
+        var content = createContentFromJson(key, value);
         var popup = new OpenLayers.Popup.AnchoredBubble(key,
                                 lonLat,
                                 new OpenLayers.Size(200,200),
@@ -33,7 +33,7 @@ function loadMarker(map, data) {
             populateData(value);
         });
     });
-    map.zoomToExtent(markersLayer.getDataExtent())
+    map.zoomToExtent(markersLayer.getDataExtent());
 
 }
 
@@ -59,6 +59,6 @@ function createContentFromJson(name, hs_data){
 }
 
 function getStatus(url, callback){
-    $.getJSON(url, callback)
+    $.getJSON(url, callback);
 }
 
