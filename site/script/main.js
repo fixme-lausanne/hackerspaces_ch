@@ -36,6 +36,9 @@ function loadMarker(map, data) {
                                 null,
                                 true);
         marker.events.register("click", marker, function (e) {
+            while(map.popups.length) {
+                map.removePopup(map.popups[0]);
+            }
             map.addPopup(popup);
             popup.show();
             populateData(value);
