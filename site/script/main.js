@@ -53,6 +53,7 @@ function loadMarker(map, data) {
 
 function populateData(data){
     var div = $('#data');
+    div.empty();
     $.each(data, function(key, value){
         var label = $('<label>');
         label.attr({'for': 'data_'+key});
