@@ -24,16 +24,34 @@ function loadMarker(map, data) {
         var popup = new OpenLayers.Popup.AnchoredBubble(key,
                                 lonLat,
                                 new OpenLayers.Size(200,200),
-                                content, 
+                                content,
                                 null,
                                 true);
         marker.events.register("click", marker, function (e) {
             map.addPopup(popup);
             popup.show();
+            populateData(value);
         });
     });
     map.zoomToExtent(markersLayer.getDataExtent())
 
+}
+
+function populateData(data){
+    var div = $('#data');
+    $.each(data, function(key, value){
+        var label = $('<label>');
+        label.attr({'for': 'data_'+key});
+        label.text(key);
+        div.append(label);
+
+        var span = $('<span>');
+        span.attr({id: 'data_'+key});
+        span.text(value);
+        div.append(span);
+
+        div.append('<br>'); //lame
+    });
 }
 
 function createContentFromJson(name, hs_data){

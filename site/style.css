@@ -25,9 +25,17 @@ h1 {
     border-radius: 4px;
 }
 
+#data {
+    margin-top: 20px;
+}
+
+#data label {
+    font-weight: bold;
+    display: inline-block;
+    width: 150px;
+}
+
 #footer {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+    margin-top: 20px;
 }
 
