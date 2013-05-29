@@ -18,7 +18,7 @@ function loadMarker(map, data) {
     map.addLayer(markersLayer);
     $.each(data, function(key, value) {
     var size = new OpenLayers.Size(25,25);
-    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
     var icon = new OpenLayers.Icon('images/hs-noinfo-marker.png', size, offset);
     var position = value.coordinate;
     var lonLat = new OpenLayers.LonLat(position[1],position[0])
