@@ -59,6 +59,12 @@ function populateData(key, data){
     div.empty();
     var title = $('<h3>').text(key)
     div.append(title)
+    var logo = data.logo
+    if (logo) {
+        var img = $('<img>').attr({'src': data.logo});
+        div.append(img);
+        div.append($('<br>'));
+    }
     $.each(data, function(key, value){
         var label = $('<label>');
         label.attr({'for': 'data_'+key});
