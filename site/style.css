@@ -35,6 +35,11 @@ h1 {
     width: 150px;
 }
 
+img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 #footer {
     margin-top: 20px;
 }
