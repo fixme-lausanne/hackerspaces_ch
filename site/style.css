@@ -15,7 +15,7 @@ h1 {
 }
 
 #body-div {
-    margin: 10px 20px;
+    margin: 10px 20px 0 20px;
 }
 
 #demoMap {
@@ -45,6 +45,8 @@ img {
 }
 
 #footer {
-    margin-top: 20px;
+    margin: 20px 0;
+    position: absolute;
+    bottom: 0;
 }
 
