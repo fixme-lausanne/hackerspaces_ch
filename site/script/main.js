@@ -4,6 +4,12 @@ function loadmap(){
     map.addLayer(new OpenLayers.Layer.OSM());
     $.getJSON('list', function(data){loadMarker(map, data);});
     map.zoomToMaxExtent();
+    if (typeof String.prototype.startsWith != 'function') {
+       //see below for better implementation!
+        String.prototype.startsWith = function (str){
+            return this.indexOf(str) == 0;
+        };
+    }
 }
 
 function createIcon(image_path) {
@@ -67,8 +73,15 @@ function populateData(key, data){
 
         var span = $('<span>');
         span.attr({id: 'data_'+key});
-        span.text(value);
-        div.append(span);
+        if (typeof value == "string" && value.startsWith("http")) {
+            var a = $('<a>')
+            a.attr({'href': value})
+            a.text(value)
+            div.append(a);
+        } else {
+            span.text(value);
+            div.append(span);
+        }
 
         div.append('<br>'); //lame
     });
