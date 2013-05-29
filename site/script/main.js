@@ -1,5 +1,5 @@
 function loadmap(){
-    map = new OpenLayers.Map("demoMap");
+    map = new OpenLayers.Map("map");
 
     map.addLayer(new OpenLayers.Layer.OSM());
     $.getJSON('list', function(data){loadMarker(map, data);});
