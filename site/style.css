@@ -25,6 +25,10 @@ h1 {
     border-radius: 4px;
 }
 
+a {
+    color: cornflowerblue;
+}
+
 #data {
     margin-top: 20px;
 }
