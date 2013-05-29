@@ -3,7 +3,7 @@ import json
 import os
 import io
 import requests
-from urllib.parse import urljoin
+from urlparse import urljoin
 from functools import partial
 import bottle
 import functools
@@ -14,23 +14,40 @@ import re
 non_numeric = re.compile('[^,\d.]+')
 
 BASE_URL = "http://hackerspaces.org"
-base_url = partial(urljoin, BASE_URL)
+def absolute_url(path):
+    return urljoin(BASE_URL, path)
+
 SWISS_HS = "/wiki/switzerland"
-HS_URL = base_url("w/index.php?title={0}&action=edit")
-LOCATION_STRING = "coordinate"
+HS_URL = absolute_url("w/index.php?title={0}&action=edit")
+LOCATION_KEY = "coordinate"
+LOGO_KEY = "logo"
 SPACE_API = "http://openspace.slopjong.de/directory.json"
 
-def get_etree(url):
+def url_for_file(filename):
+    url = "http://hackerspaces.org/wiki/File:{0}".format(filename)
+    tree = get_etree(url)
+    url = tree.xpath('//a[@class="internal"]/@href')
+    if len(url) == 1:
+        return url[0]
+
+def get_etree(url, browser_dump=False):
     """Return a etree from an url using request
     """
     resp = requests.get(url)
+    if browser_dump:
+        with open('dump', 'w') as f:
+            f.write(resp.content)
+        import webbrowser
+        webbrowser.open('dump')
+        exit(0)
+
     tree = etree.parse(io.StringIO(resp.text))
     return tree
 
 def get_hackerspaces():
-    tree = get_etree(base_url(SWISS_HS))
-    links = tree.xpath('//*[@id="mw-content-text"]/table[2]//td//text()')
-    hs_names = links[::2]
+    tree = get_etree(absolute_url(SWISS_HS))
+    hs_names = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li//text()')
+    links = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li/a/@href')
 
     hackerspaces = {}
     for name in hs_names:
@@ -75,12 +92,16 @@ def get_hackerspace(name):
     for kv in result.split("|"):
         try:
             key, value = [el.replace('\n', ' ').strip() for el in kv.split("=")]
-            if key == LOCATION_STRING:
+            if key == LOCATION_KEY:
                 value = clean_location(value)
-            ret[key] = value
+            elif key == LOGO_KEY:
+                value = absolute_url(url_for_file(value))
+            if value:
+                ret[key] = value
         except ValueError:
             pass
     return ret
+
 
 def clean_location(location_string):
     """This method will remove all non numeric or commas or dot from a string, then
