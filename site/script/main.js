@@ -74,7 +74,7 @@ function loadMarker(map, data) {
 function populateData(key, data){
     var div = $('#data');
     div.empty();
-    var title = $('<h3>').text(key)
+    var title = $('<h2>').text(key)
     div.append(title)
     var logo = data.logo
     if (logo) {
