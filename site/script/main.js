@@ -82,9 +82,9 @@ function getStatus(url, marker){
         //set the icon according to the cursor
         var open = space_api.open;
         if (open === true) {
-            marker.icon = createIcon('images/hs-open-marker.png');
+            marker.setUrl('images/hs-open-marker.png');
         } else if (open === false) {
-            marker.icon = createIcon('images/hs-closed-marker.png');
+            marker.setUrl('images/hs-closed-marker.png');
         }
     });
 }
