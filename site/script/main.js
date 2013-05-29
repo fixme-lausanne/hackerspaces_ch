@@ -91,7 +91,7 @@ function createContentFromJson(name, hs_data){
 }
 
 function getStatus(url, marker){
-    $.getJSON(url, function(space_api) {
+    $.getJSON(url + "?callback=?", function(space_api) {
         //set the icon according to the cursor
         var open = space_api.open;
         if (open === true) {
