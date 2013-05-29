@@ -41,7 +41,7 @@ function loadMarker(map, data) {
             }
             map.addPopup(popup);
             popup.show();
-            populateData(value);
+            populateData(key, value);
         });
         //fetch the status of the hackerspace and change the icon
         //accordingly
@@ -54,9 +54,11 @@ function loadMarker(map, data) {
 
 }
 
-function populateData(data){
+function populateData(key, data){
     var div = $('#data');
     div.empty();
+    var title = $('<h3>').text(key)
+    div.append(title)
     $.each(data, function(key, value){
         var label = $('<label>');
         label.attr({'for': 'data_'+key});
