@@ -95,7 +95,8 @@ def get_hackerspace(name):
             if key == LOCATION_KEY:
                 value = clean_location(value)
             elif key == LOGO_KEY:
-                value = absolute_url(url_for_file(value))
+                if value:
+                    value = absolute_url(url_for_file(value))
             if value:
                 ret[key] = value
         except ValueError:
