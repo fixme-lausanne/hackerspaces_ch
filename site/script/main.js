@@ -1,13 +1,10 @@
-var hs;
-
 function loadmap(){
     map = new OpenLayers.Map("map");
     map.addLayer(new OpenLayers.Layer.OSM());
     $.getJSON('list', function(data){
-        hs = data;
         loadMarker(map, data);
         createMenu(data);
-        loadByHash();
+        loadByHash(data);
     });
     if (typeof String.prototype.startsWith != 'function') {
        //see below for better implementation!
@@ -127,9 +124,7 @@ function createMenu(data){
         a.attr({'href': '#'+k})
         a.click(function(){
             populateData(k, v);
-            var pos = new OpenLayers.LonLat(v.coordinate[1], v.coordinate[0]).transform(
-               new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
-            map.setCenter(pos, 16);
+            map.setCenter(getPosition(v), 13);
         });
         a.text(k)
         li.append(a);
@@ -137,10 +132,11 @@ function createMenu(data){
     });
 }
 
-function loadByHash(){
+function loadByHash(data){
     var hash = window.location.hash;
     if(hash){
         var key = hash.split('#')[1];
-        populateData(key, hs[key]);
+        populateData(key, data[key]);
+        map.setCenter(getPosition(data[key]), 13);
     }
 }
