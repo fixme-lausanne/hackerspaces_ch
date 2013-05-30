@@ -18,11 +18,15 @@ h1 {
     margin: 10px 20px;
 }
 
+#menu {
+    width: 20%;
+    float:left;
+}
+
 #map {
-    width: 100%;
+    width: 80%;
+    float: right;
     height: 350px;
-    margin: 0px;
-    border-radius: 4px;
 }
 
 #data {
@@ -41,6 +45,9 @@ img {
 }
 
 #footer {
-    margin-top: 20px;
+    margin: 20px 0;
+    clear: both;
+    position: absolute;
+    bottom: 0;
 }
 

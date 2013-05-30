@@ -1,9 +1,10 @@
 function loadmap(){
     map = new OpenLayers.Map("map");
-
     map.addLayer(new OpenLayers.Layer.OSM());
-    $.getJSON('list', function(data){loadMarker(map, data);});
-    map.zoomToMaxExtent();
+    $.getJSON('list', function(data){
+        loadMarker(map, data);
+        createMenu(data);
+    });
     if (typeof String.prototype.startsWith != 'function') {
        //see below for better implementation!
         String.prototype.startsWith = function (str){
@@ -51,7 +52,6 @@ function loadMarker(map, data) {
         }
     });
     map.zoomToExtent(markersLayer.getDataExtent());
-
 }
 
 function populateData(key, data){
@@ -102,3 +102,17 @@ function getStatus(url, marker) {
     });
 }
 
+function createMenu(data){
+    var menu = $('#menu');
+    $.each(data, function(k, v){
+        var a = $('<a>');
+        a.click(function(){
+            var pos = new OpenLayers.LonLat(v.coordinate[1], v.coordinate[0]).transform(
+               new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+            map.setCenter(pos, 16);
+        });
+        a.text(k)
+        menu.append(a);
+        menu.append('<br>');
+    });
+}
