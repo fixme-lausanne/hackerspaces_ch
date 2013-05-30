@@ -35,6 +35,7 @@ a {
 
 #data {
     margin-top: 20px;
+    float: left;
 }
 
 #data label {
@@ -50,8 +51,7 @@ img {
 
 #footer {
     margin: 20px 0;
+    float: left;
     clear: both;
-    position: absolute;
-    bottom: 0;
 }
 
