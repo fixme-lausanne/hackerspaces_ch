@@ -29,6 +29,10 @@ h1 {
     height: 350px;
 }
 
+a {
+    color: cornflowerblue;
+}
+
 #data {
     margin-top: 20px;
 }
