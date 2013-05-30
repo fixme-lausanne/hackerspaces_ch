@@ -119,6 +119,7 @@ function getStatus(url, marker) {
 function createMenu(data){
     var menu = $('#menu');
     $.each(data, function(k, v){
+        var li = $('<li>');
         var a = $('<a>');
         a.attr({'href': '#'+k})
         a.click(function(){
@@ -128,7 +129,7 @@ function createMenu(data){
             map.setCenter(pos, 16);
         });
         a.text(k)
-        menu.append(a);
-        menu.append('<br>');
+        li.append(a);
+        menu.append(li);
     });
 }

@@ -19,8 +19,18 @@ h1 {
 }
 
 #menu {
-    width: 20%;
+    width: 15%;
     float:left;
+}
+
+ul#menu {
+    padding: 0;
+    margin: 0 0 0 15px;
+}
+
+#menu li {
+    padding-left: 15px;
+    margin-bottom: 5px;
 }
 
 #map {
