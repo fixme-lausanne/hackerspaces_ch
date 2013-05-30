@@ -120,6 +120,7 @@ function createMenu(data){
     var menu = $('#menu');
     $.each(data, function(k, v){
         var a = $('<a>');
+        a.attr({'href': '#'+k})
         a.click(function(){
             var pos = new OpenLayers.LonLat(v.coordinate[1], v.coordinate[0]).transform(
                new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
