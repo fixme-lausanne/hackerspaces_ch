@@ -1,9 +1,13 @@
+var hs;
+
 function loadmap(){
     map = new OpenLayers.Map("map");
     map.addLayer(new OpenLayers.Layer.OSM());
     $.getJSON('list', function(data){
+        hs = data;
         loadMarker(map, data);
         createMenu(data);
+        loadByHash();
     });
     if (typeof String.prototype.startsWith != 'function') {
        //see below for better implementation!
@@ -62,7 +66,6 @@ function loadMarker(map, data) {
         var lonLat = getPosition(value);
         var d = distance(lonLat, center);
         if (d < min_dist) {
-            console.log(d);
             min_dist = d;
             min_value = value;
             min_key = key;
@@ -132,4 +135,12 @@ function createMenu(data){
         li.append(a);
         menu.append(li);
     });
+}
+
+function loadByHash(){
+    var hash = window.location.hash;
+    if(hash){
+        var key = hash.split('#')[1];
+        populateData(key, hs[key]);
+    }
 }
