@@ -9,7 +9,7 @@ body {
     font-family:'andale mono', sans-serif;
 }
 
-h1 {
+thead {
     font-size:xx-large;
     margin-bottom: 20px;
 }
@@ -43,20 +43,19 @@ a {
     color: cornflowerblue;
 }
 
-#data {
+td.label{
     margin-top: 20px;
     float: left;
 }
 
-#data label {
+td.value{
     font-weight: bold;
     display: inline-block;
     width: 150px;
 }
 
-img {
-    margin-top: 10px;
-    margin-bottom: 10px;
+td.logo {
+    text-align: justify;
 }
 
 footer {

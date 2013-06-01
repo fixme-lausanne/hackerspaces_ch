@@ -74,33 +74,42 @@ function loadMarker(map, data) {
 function populateData(key, data){
     var div = $('#data');
     div.empty();
-    var title = $('<h2>').text(key)
-    div.append(title)
+    var table = $('<table>');
+    div.append(table)
+    var title = $('<thead>').text(key)
+    table.append(title)
+
     var logo = data.logo
     if (logo) {
-        var img = $('<img>').attr({'src': data.logo});
-        div.append(img);
-        div.append($('<br>'));
+        var logo_line = $('<tr>')
+        var logo = $('<img>').attr({'src': data.logo});
+        var logo_cell = $('<td>')
+        logo_cell.attr({'colspan': 2, 'class': 'logo'});
+        logo_cell.append(logo)
+        logo_line.append(logo_cell);
+        table.append(logo_line)
     }
-    $.each(data, function(key, value){
-        var label = $('<label>');
-        label.attr({'for': 'data_'+key});
-        label.text(key);
-        div.append(label);
 
-        var span = $('<span>');
-        span.attr({id: 'data_'+key});
+    $.each(data, function(key, value){
+        var line = $('<tr>')
+
+        var label = $('<td>');
+        label.attr({'class': 'label'})
+        label.text(key);
+        line.append(label);
+
+        var v = $('<td>');
+        v.attr({'class': 'value'})
         if (typeof value == "string" && value.startsWith("http")) {
             var a = $('<a>')
             a.attr({'href': value})
             a.text(value)
-            div.append(a);
+            v.append(a);
         } else {
-            span.text(value);
-            div.append(span);
+            v.text(value);
         }
-
-        div.append('<br>'); //lame
+        line.append(v)
+        table.append(line)
     });
 }
 
