@@ -19,8 +19,9 @@ thead {
 }
 
 #menu {
-    width: 15%;
+    width: 10%;
     float:left;
+    margin-top: 70px;
 }
 
 ul#menu {
@@ -41,6 +42,17 @@ ul#menu {
 
 a {
     color: cornflowerblue;
+}
+
+h1 {
+    float: right;
+    width: 80%;
+}
+
+table {
+    float: right;
+    width: 80%;
+    margin-top: 10px;
 }
 
 td.value{
