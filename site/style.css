@@ -9,6 +9,10 @@ body {
     font-family:'andale mono', sans-serif;
 }
 
+header {
+    float: left;
+    width: 80%;
+}
 thead {
     font-size:xx-large;
     margin-bottom: 20px;
@@ -36,7 +40,7 @@ ul#menu {
 
 #map {
     width: 80%;
-    float: right;
+    float: left;
     height: 350px;
 }
 
@@ -44,10 +48,6 @@ a {
     color: cornflowerblue;
 }
 
-h1 {
-    float: right;
-    width: 80%;
-}
 
 table {
     float: right;
