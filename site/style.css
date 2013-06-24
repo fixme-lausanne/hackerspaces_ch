@@ -42,26 +42,24 @@ a {
 #hslist ul {
   list-style: none; /* No bullets */
   padding: 0;
-  margin: 0;
+  margin: 10px 0;
+  text-align: center;
 }
 
 #hslist li {
-  display: inline; /* Horizontal list */
+  display: inline-block; /* Horizontal list */
   padding: 0;
-  margin: 0;
+  margin: 5px 5px;
+  /*background: #5F79A3;*/
+  padding: 3px;
+  border: 1px solid #5476b1;
+  box-shadow: 0 0 5px #333;
+  border-radius: 3px;
+  font-size: 80%;
 }
 
-#hslist li + li {
-  margin-left: 10px; /* Gap on the left of the pipe */
-}
-
-#hslist li:before {
-  content: '|'; /* Add pipe before items */
-  margin-right: 10px; /* Gap on the right of the pipe */
-}
-
-#hslist li:first-child:before {
-  content: none; /* Remove pipe before first item */
+#hslist li a {
+  text-decoration: none;
 }
 
 
@@ -91,6 +89,7 @@ a {
   display: inline-block;
   background: #445775;
   padding: 0 1em; /* Line stops before and after name */
+  font-size: 1.17em;
 }
 
 #hsdata header #hslogo {
