@@ -1,3 +1,5 @@
+$(document).ready(loadmap)
+
 function loadmap(){
     map = new OpenLayers.Map("map");
     map.addLayer(new OpenLayers.Layer.OSM());
@@ -126,18 +128,20 @@ function getStatus(url, marker) {
 }
 
 function createMenu(data){
-    var menu = $('#menu');
+    var menu = $('#hslist');
+    ul = $('<ul>')
+    menu.append(ul)
     $.each(data, function(k, v){
-        var li = $('<li>');
-        var a = $('<a>');
+        a = $('<a>')
         a.attr({'href': '#'+k})
         a.click(function(){
             populateData(k, v);
             map.setCenter(getPosition(v), 13);
         });
         a.text(k)
+        li = $('<li>')
         li.append(a);
-        menu.append(li);
+        ul.append(li);
     });
 }
 
