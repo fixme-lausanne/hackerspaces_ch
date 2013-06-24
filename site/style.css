@@ -92,6 +92,11 @@ a {
   padding: 0 1em; /* Line stops before and after name */
 }
 
+#hsdata header #hslogo {
+  max-height: 150px;
+  max-width: 350px;
+}
+
 
 #hsdata dl dd + dt { /* Between each items */
   margin-top: 1em;
