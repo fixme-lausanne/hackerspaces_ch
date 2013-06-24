@@ -130,7 +130,7 @@ function getStatus(url, marker) {
 function createMenu(data){
     var menu = $('#hslist');
     ul = $('<ul>')
-    menu.append(ul)
+    menu.children().replaceWith(ul)
     $.each(data, function(k, v){
         a = $('<a>')
         a.attr({'href': '#'+k})
