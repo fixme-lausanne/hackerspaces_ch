@@ -14,7 +14,8 @@ header h1 {
 }
 
 #content {
-  /* Not needed currently. But hey! it's there! */
+  width: 800px;
+  margin: 0 auto;
 }
 
 footer {
