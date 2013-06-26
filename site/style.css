@@ -1,78 +1,110 @@
-html, body {
-    margin: 0;
-    padding: 0;
-}
-
 body {
-    background-image:url('images/blue-back.jpg');
+    padding: 1em 2em;
+    background-color: #445775;
     color: white;
-    font-family:'andale mono', sans-serif;
+    font-family: sans-serif;
 }
 
 header {
-    float: left;
-    width: 80%;
-}
-thead {
-    font-size:xx-large;
-    margin-bottom: 20px;
+  margin-bottom: 2em;
 }
 
-#body-div {
-    margin: 10px 20px;
+header h1 {
+  margin: 0;
 }
 
-#menu {
-    width: 10%;
-    float:left;
-    margin-top: 70px;
-}
-
-ul#menu {
-    padding: 0;
-    margin: 0 0 0 15px;
-}
-
-#menu li {
-    padding-left: 15px;
-    margin-bottom: 5px;
-}
-
-#map {
-    width: 80%;
-    float: left;
-    height: 350px;
-}
-
-a {
-    color: cornflowerblue;
-}
-
-
-table {
-    float: right;
-    width: 80%;
-    margin-top: 10px;
-}
-
-td.value{
-    margin-top: 20px;
-    float: left;
-}
-
-td.label{
-    font-weight: bold;
-    display: inline-block;
-    width: 150px;
-}
-
-td.logo {
-    text-align: justify;
+#content {
+  width: 800px;
+  margin: 0 auto;
 }
 
 footer {
-    margin: 20px 0;
-    float: left;
-    clear: both;
+  margin: 20px 0;
+}
+
+a {
+  color: cornflowerblue;
+}
+
+
+/*** Map ***/
+
+#map {
+  height: 350px;
+}
+
+
+/*** HS List ***/
+
+#hslist ul {
+  list-style: none; /* No bullets */
+  padding: 0;
+  margin: 10px 0;
+  text-align: center;
+}
+
+#hslist li {
+  display: inline; /* Horizontal list */
+  margin: 0;
+  padding: 0;
+}
+
+#hslist li a {
+  display: inline-block;
+  margin: 5px;
+  padding: 3px;
+  border: 1px solid #5476b1;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #333;
+
+  font-size: 80%;
+  text-decoration: none;
+}
+
+#hslist li a:hover {
+  box-shadow: 0 0 5px #111;
+}
+
+#hslist li a:active {
+  box-shadow: inset 0 0 3px #111;
+}
+
+
+/*** HS Data ***/
+
+#hsdata {
+  margin-top: 2em;
+  padding: 1em 0;
+  border: 1px #5476b1;
+  border-style: solid none; /* Top and bottom visible */
+}
+
+
+/* The header should appear on the right of the data box, with content surrounding it. Also, the HS name should be placed on the #hsdata top border, and the border should not be drawn under the name (with a gap between the border and the name). However, the border should act normally with the logo (if any). */
+
+#hsdata header {
+  float: right;
+  margin: -2em 0 1em 1em;
+  
+  padding-right: 4em; /* Displacement */
+  text-align: right;
+}
+
+#hsdata header #hsname {
+  position: relative;
+  right: -1em; /* Same as right padding, in opposite direction (cancels displacement) */
+  display: inline-block;
+  background: #445775;
+  padding: 0 1em; /* Line stops before and after name */
+}
+
+#hsdata header #hslogo {
+  max-height: 150px;
+  max-width: 350px;
+}
+
+
+#hsdata dl dd + dt { /* Between each items */
+  margin-top: 1em;
 }
 

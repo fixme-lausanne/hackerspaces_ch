@@ -1,3 +1,5 @@
+$(document).ready(loadmap)
+
 function loadmap(){
     map = new OpenLayers.Map("map");
     map.addLayer(new OpenLayers.Layer.OSM());
@@ -72,44 +74,36 @@ function loadMarker(map, data) {
 }
 
 function populateData(key, data){
-    var div = $('#data');
-    div.empty();
-    var table = $('<table>');
-    div.append(table)
-    var title = $('<thead>').text(key)
-    table.append(title)
+    var hsdata = $('#hsdata');
+    $("#hsname").text(key);
 
     var logo = data.logo
+    var logo_img = hsdata.find('#hslogo')
     if (logo) {
-        var logo_line = $('<tr>')
-        var logo = $('<img>').attr({'src': data.logo});
-        var logo_cell = $('<td>')
-        logo_cell.attr({'colspan': 2, 'class': 'logo'});
-        logo_cell.append(logo)
-        logo_line.append(logo_cell);
-        table.append(logo_line)
+        logo_img.attr('src', logo);
+        logo_img.show()
+    } else {
+        logo_img.attr('src', null)
+        logo_img.hide()
     }
-
+    var dl = hsdata.children('dl');
+    dl.empty()
     $.each(data, function(key, value){
-        var line = $('<tr>')
+        var dt = $('<dt>');
+        dt.text(key)
+        dl.append(dt);
 
-        var label = $('<td>');
-        label.attr({'class': 'label'})
-        label.text(key);
-        line.append(label);
-
-        var v = $('<td>');
-        v.attr({'class': 'value'})
+        var dd = $('<dd>');
         if (typeof value == "string" && value.startsWith("http")) {
             var a = $('<a>')
             a.attr({'href': value})
             a.text(value)
-            v.append(a);
+            dd.append(a);
         } else {
-            v.text(value);
+
+            dd.text(value);
         }
-        line.append(v)
-        table.append(line)
+        dl.append(dd)
     });
 }
 
@@ -126,18 +120,20 @@ function getStatus(url, marker) {
 }
 
 function createMenu(data){
-    var menu = $('#menu');
+    var menu = $('#hslist');
+    var ul = $('<ul>');
+    menu.children().replaceWith(ul);
     $.each(data, function(k, v){
-        var li = $('<li>');
         var a = $('<a>');
         a.attr({'href': '#'+k})
         a.click(function(){
             populateData(k, v);
             map.setCenter(getPosition(v), 13);
         });
-        a.text(k)
+        a.text(k);
+        var li = $('<li>');
         li.append(a);
-        menu.append(li);
+        ul.append(li);
     });
 }
 
