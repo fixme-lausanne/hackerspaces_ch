@@ -21,7 +21,7 @@ SWISS_HS = "/wiki/switzerland"
 HS_URL = absolute_url("w/index.php?title={0}&action=edit")
 LOCATION_KEY = "coordinate"
 LOGO_KEY = "logo"
-SPACE_API = "http://openspace.slopjong.de/directory.json"
+SPACE_API = "http://spaceapi.net/directory.json"
 
 def url_for_file(filename):
     url = "http://hackerspaces.org/wiki/File:{0}".format(filename)
@@ -63,7 +63,7 @@ def get_space_api_url(name):
     req = requests.get(SPACE_API)
     j = json.loads(req.text)
     return j.get(name)
-    
+
 def get_hackerspace(name):
     url = HS_URL.format(name)
     tree = get_etree(url)
@@ -106,7 +106,7 @@ def get_hackerspace(name):
 
 def clean_location(location_string):
     """This method will remove all non numeric or commas or dot from a string, then
-    split it on the comma and select only the 2 first element. This has the goal to 
+    split it on the comma and select only the 2 first element. This has the goal to
     clean any string that is malformed
     """
     return non_numeric.sub('', location_string).split(",")[:2]
