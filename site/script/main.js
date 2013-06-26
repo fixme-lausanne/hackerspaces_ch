@@ -81,8 +81,10 @@ function populateData(key, data){
     var logo_img = hsdata.find('#hslogo')
     if (logo) {
         logo_img.attr('src', logo);
+        logo_img.show()
     } else {
         logo_img.attr('src', null)
+        logo_img.hide()
     }
     var dl = hsdata.children('dl');
     dl.empty()
@@ -98,7 +100,7 @@ function populateData(key, data){
             a.text(value)
             dd.append(a);
         } else {
-            
+
             dd.text(value);
         }
         dl.append(dd)
