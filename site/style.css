@@ -35,9 +35,6 @@ a {
 
 
 /*** HS List ***/
-/* The list is transformed from a bullet-list (ul) to a pipe-
- * separated list
- */
 
 #hslist ul {
   list-style: none; /* No bullets */
