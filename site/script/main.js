@@ -55,7 +55,7 @@ function loadMarker(map, data) {
         //accordingly
         var status_url = value.space_url;
         if (status_url) {
-            getSpaceApiData(status_url, marker);
+            getSpaceApiData(key, status_url, marker);
         }
     });
     map.zoomToExtent(markersLayer.getDataExtent());
@@ -113,7 +113,7 @@ function populateData(key){
     });
 }
 
-function getSpaceApiData(url, marker) {
+function getSpaceApiData(key, url, marker) {
     $.getJSON(url, function(space_api) {
         //set the status icon
         var open = space_api.open;
@@ -123,7 +123,9 @@ function getSpaceApiData(url, marker) {
             marker.setUrl('images/hs-closed-marker.png');
         }
         // Merge SpaceApi data
-        console.log(marker);
+        $.each(space_api, function(k, v){
+            hackerspaces[key][k] = v;
+        });
     });
 }
 
