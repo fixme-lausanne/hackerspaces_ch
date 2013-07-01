@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css" media="screen" /> 
+  <link rel="shortcut icon" href="http://hackerspaces.org/favicon.ico" />
+
+  <script src="libs/OpenLayers.js"></script>
+  <script src="libs/jquery.js"></script>
+  <script src="script/main.js"></script>
+
+  <title>hackerspaces.ch</title>
+  <meta name="description" content="A list of hackerspaces in switzerland"> 
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <meta name="keywords" content="hackerspace switzerland">
+</head>
+
+<body>
+  <header>
+    <h1>HACKERSPACES.CH</h1>
+  </header>
+  
+  <section id="content">
+    <div id="map"><!-- Placeholder for the map. Leave it alone!  --></div>
+
+    <nav id="hslist">
+      <!--
+        Clickable list of hackerspaces. When clicked, the map is centered on
+        the clicked HS and HS data is displayed.
+        Each HS link (really, any HTML element) has to be contained inside
+        <li></li> to be formatted appropriately.
+
+        Should be initially an empty <nav> box, replaced by JS with the actual
+        list.
+      -->
+      <ul>
+        <li><a href="#">FIXME</a></li>
+        <li><a href="#">PTL</a></li>
+        <li><a href="#">Lorem</a></li>
+        <li><a href="#">Ipsum</a></li>
+        <li><a href="#">Dolor</a></li>
+      </ul>
+    </nav>
+
+  <article id="hsdata">
+    <!--
+      Contains data for the selected HS.
+
+      Should be initially an empty <article> box, replaced by JS with the
+      actual content when available.
+    -->
+      <header>
+        <h1><span id="hsname">{NAME}</span></h1>
+        <img id="hslogo" src="{LOGO_URL}" alt="Logo">
+      </header>
+      
+
+      <dl>
+        <dt>{FIELD_NAME}</dt>
+        <dd>{FIELD_VALUE}</dd>
+        
+        <dt>Lorem</dt>
+        <dd>
+          <!--lorem-->Habitant morbi tristique senectus et
+          netus et malesuada fames ac turpis egestas. Duis ultricies urna. Etiam
+          enim urna, pharetra suscipit, varius et, congue quis, odio. Donec
+          lobortis, elit bibendum euismod faucibus, velit nibh egestas libero,
+          vitae pellentesque elit augue ut massa.<br>
+
+          Nulla consequat erat at massa. Vivamus id mi. Morbi purus enim, dapibus a,
+          facilisis non, tincidunt at, enim. Vestibulum ante ipsum primis in faucibus
+          orci luctus et ultrices posuere cubilia Curae; Duis imperdiet eleifend arcu.
+          Cras magna ligula, consequat at, tempor non, posuere nec, libero. Vestibulum
+          vel ipsum. Praesent congue justo et nunc. Vestibulum nec felis vitae nisl
+          pharetra sollicitudin. Quisque.<!--/lorem-->
+        </dd>
+        
+        <dt>Ipsum</dt>
+        <dd><!--lorem-->Leo. In eget pede. Donec porta.<!-- /lorem --></dd>
+        
+        <dt>Dolor</dt>
+        <dd>
+          <!--lorem-->Etiam facilisis. Nam suscipit. Ut consectetuer leo vehicula augue. Aliquam
+          cursus. Integer pharetra rhoncus massa. Cras et ligula vel quam tristique
+          commodo. Sed est lectus, mollis quis, lacinia id, sollicitudin nec, eros.
+          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
+          cubilia Curae; Morbi urna dui, fermentum quis, feugiat imperdiet, imperdiet id,
+          sapien. Phasellus auctor nunc. Vivamus eget augue quis neque vestibulum
+          placerat. Duis placerat. Maecenas accumsan rutrum lacus. Vestibulum lacinia
+          semper nibh. Aenean diam odio, scelerisque at, ullamcorper nec, tincidunt
+          dapibus, quam. Duis vel ante nec tortor porta mollis. Praesent orci. Cras
+          dignissim.<!--/lorem-->
+        </dd>
+      </dl>
+    </article>
+  </section>
+
+  <footer>
+    Created by <a href="http://fixme.ch">FIXME.CH</a> - Sources: <a href="https://github.com/fixme-lausanne/hackerspaces_ch">Github</a>
+  </footer>
+</body>
+</html>

@@ -9,7 +9,7 @@ function loadmap(){
         loadByHash(data);
     });
     if (typeof String.prototype.startsWith != 'function') {
-       //see below for better implementation!
+        //see below for better implementation!
         String.prototype.startsWith = function (str){
             return this.indexOf(str) == 0;
         };
@@ -20,18 +20,18 @@ function loadmap(){
 }
 
 function createIcon(image_path) {
-        var size = new OpenLayers.Size(21,25);
-        var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-        var icon = new OpenLayers.Icon(image_path, size, offset);
-        return icon;
+    var size = new OpenLayers.Size(21,25);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+    var icon = new OpenLayers.Icon(image_path, size, offset);
+    return icon;
 }
 
 function getPosition(data){
     var position = data.coordinate;
     var lonLat = new OpenLayers.LonLat(position[1],position[0])
         .transform(
-           new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-           map.getProjectionObject()); // to Spherical Mercator Projection
+        new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+        map.getProjectionObject()); // to Spherical Mercator Projection
     return lonLat;
 }
 
@@ -41,13 +41,13 @@ function loadMarker(map, data) {
     $.each(data, function(key, value) {
         var size = new OpenLayers.Size(25,25);
         var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
-        var icon = new OpenLayers.Icon('images/hs-noinfo-marker.png', size, offset);
+        var icon = new OpenLayers.Icon('img/hs-noinfo-marker.png', size, offset);
         var lonLat = getPosition(value)
         var marker = new OpenLayers.Marker(lonLat, icon);
         markersLayer.addMarker(marker);
         marker.events.register("click", marker, function (e) {
             populateData(key, value);
-            });
+        });
         //fetch the status of the hackerspace and change the icon
         //accordingly
         var status_url = value.space_url;
@@ -72,7 +72,7 @@ function loadMarker(map, data) {
             min_value = value;
             min_key = key;
         }
-        });
+    });
     populateData(min_key, min_value);
 }
 
@@ -115,9 +115,9 @@ function getStatus(url, marker) {
         //set the icon according to the cursor
         var open = space_api.open;
         if (open === true) {
-            marker.setUrl('images/hs-open-marker.png');
+            marker.setUrl('img/hs-open-marker.png');
         } else if (open === false) {
-            marker.setUrl('images/hs-closed-marker.png');
+            marker.setUrl('img/hs-closed-marker.png');
         }
     });
 }
