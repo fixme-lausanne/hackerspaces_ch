@@ -275,7 +275,7 @@ px      68    160    252    */
 
 	/* home slider */
 	
-	#slider-holder{ padding-bottom: 22px;}
+	#slider-holder{ /*padding-bottom: 22px;*/ }
 	
 	.home-slider { 
 		width: 320px; 

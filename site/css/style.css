@@ -184,7 +184,6 @@ header #logo{
 
 #comboNav{
     width: 100%;
-    margin-top: 30px;
     margin-bottom: 20px;
     float: left;
 }
@@ -193,20 +192,20 @@ header #logo{
 
 /*** HS List ***/
 
-#hslist ul {
+#nav ul {
     list-style: none; /* No bullets */
     padding: 0;
     margin: 10px 0;
     text-align: center;
 }
 
-#hslist li {
+#nav li {
     display: inline; /* Horizontal list */
     margin: 0;
     padding: 0;
 }
 
-#hslist li a {
+#nav li a {
     color: #f1f1f1;
     display: inline-block;
     margin: 5px;
@@ -217,13 +216,14 @@ header #logo{
     box-shadow: 0 0 5px #111;
 }
 
-#hslist li a:hover {
+#nav li a:hover,
+#nav li a.active {
     color: #fee271;
     box-shadow: 0 0 5px #fee271;
 }
 
-#hslist li a:active {
-    box-shadow: inset 0 0 3px #111;
+#nav li a:active {
+    box-shadow: inset 0 0 3px #fee271;
 }
 
 

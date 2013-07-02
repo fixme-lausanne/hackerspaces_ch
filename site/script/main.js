@@ -108,6 +108,14 @@ function populateData(key, data){
         }
         dl.append(dd)
     });
+
+
+    // Update Nav
+    $('#nav a').removeClass('active');
+    $('#nav a[href="#'+ key +'"]').addClass('active');
+
+    // Update comboNav
+    $('#comboNav').val('#' + key);
 }
 
 function getStatus(url, marker) {
@@ -123,10 +131,12 @@ function getStatus(url, marker) {
 }
 
 function createMenu(data){
-    var menu = $('#hslist');
+    var menu = $('#nav');
+    var select = $('#comboNav');
     var ul = $('<ul>');
     menu.children().replaceWith(ul);
     $.each(data, function(k, v){
+        // Link menu
         var a = $('<a>');
         a.attr({'href': '#'+k})
         a.click(function(){
@@ -137,6 +147,20 @@ function createMenu(data){
         var li = $('<li>');
         li.append(a);
         ul.append(li);
+
+        // Option combo nav
+        var o = $('<option>');
+        o.attr({'value': '#'+k}).text(k);
+        o.click(function(){
+            populateData(k, v);
+            map.setCenter(getPosition(v), 13);
+        });
+        select.append(o);
+    });
+    select.change(function() {
+        var key = this.options[this.selectedIndex].value.split('#')[1];
+        populateData(key, data[key]);
+        map.setCenter(getPosition(data[key]), 13);
     });
 }
 
