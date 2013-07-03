@@ -66,6 +66,10 @@ def get_space_api_url(space_api, hackerspaces, name):
         print '%s has %s' % (name, url)
         return url
     else:
+        for i in space_api.values():
+            if re.match('%s.*'%hackerspaces[name]['site'], i):
+                print '%s has %s' % (name, i)
+                return i
         try:
             url = '%s/status.json' % hackerspaces[name]['site']
             if not url.startswith('http'):
