@@ -9,7 +9,6 @@ function loadmap(){
         hackerspaces = data;
         loadMarker(map);
         createMenu();
-        loadByHash();
     });
     if (typeof String.prototype.startsWith != 'function') {
        //see below for better implementation!
@@ -51,12 +50,7 @@ function loadMarker(map, data) {
         marker.events.register("click", marker, function (e) {
             populateData(key, value);
             });
-        //fetch the status of the hackerspace and change the icon
-        //accordingly
-        var status_url = value.space_url;
-        if (status_url) {
-            getSpaceApiData(key, status_url, marker);
-        }
+        getSpaceApiData(key, value.space_url, marker);
     });
     map.zoomToExtent(markersLayer.getDataExtent());
 
@@ -114,6 +108,10 @@ function populateData(key){
 }
 
 function getSpaceApiData(key, url, marker) {
+    if (!url) {
+        console.log(key + ' has no spaceapi');
+        return;
+    }
     $.getJSON(url, function(space_api) {
         //set the status icon
         var open = space_api.open;
@@ -126,6 +124,8 @@ function getSpaceApiData(key, url, marker) {
         $.each(space_api, function(k, v){
             hackerspaces[key][k] = v;
         });
+
+        loadByHash();
     });
 }
 
