@@ -140,7 +140,7 @@ function createMenu(){
         a.attr({'href': '#'+k})
         a.click(function(){
             populateData(k, v);
-            map.setCenter(getPosition(v), 13);
+            map.setCenter(getPosition(v.coordinate), 13);
         });
         a.text(k);
         var li = $('<li>');
