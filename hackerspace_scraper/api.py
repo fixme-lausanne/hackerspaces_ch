@@ -49,20 +49,35 @@ def get_hackerspaces():
     hs_names = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li//text()')
     links = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li/a/@href')
 
+    space_api = json.loads(requests.get(SPACE_API).text)
     hackerspaces = {}
     for name in hs_names:
         hackerspaces[name] = get_hackerspace(name)
 
         #space api url
-        space_url = get_space_api_url(name)
+        space_url = get_space_api_url(space_api, hackerspaces, name)
         if space_url:
             hackerspaces[name]['space_url'] = space_url
     return hackerspaces
 
-def get_space_api_url(name):
-    req = requests.get(SPACE_API)
-    j = json.loads(req.text)
-    return j.get(name)
+def get_space_api_url(space_api, hackerspaces, name):
+    url = space_api.get(name)
+    if url:
+        print '%s has %s' % (name, url)
+        return url
+    else:
+        try:
+            url = '%s/status.json' % hackerspaces[name]['site']
+            if not url.startswith('http'):
+                url = 'http://%s' % url
+            req = requests.get(url)
+            if req.status_code==200 and 'json' in req.headers['content-type']:
+                print '%s has %s' % (name, url)
+                return url
+            else:
+                print '%s has no spaceapi' % name
+        except Exception, e:
+            print e
 
 def get_hackerspace(name):
     url = HS_URL.format(name)
@@ -115,5 +130,5 @@ if __name__ == '__main__':
     file_path = os.path.join(os.path.dirname(os.path.dirname((os.path.abspath(__file__)))), "site/list")
     with open(file_path, 'w') as f:
         hs = get_hackerspaces()
-        print(hs)
+        #print(hs)
         json.dump(hs, f)
