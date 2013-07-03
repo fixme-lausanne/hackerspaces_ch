@@ -25,8 +25,7 @@ function createIcon(image_path) {
         return icon;
 }
 
-function getPosition(data){
-    var position = data.coordinate;
+function getPosition(position){
     var lonLat = new OpenLayers.LonLat(position[1],position[0])
         .transform(
            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
@@ -38,10 +37,13 @@ function loadMarker(map, data) {
     var markersLayer = new OpenLayers.Layer.Markers("Markers");
     map.addLayer(markersLayer);
     $.each(hackerspaces, function(key, value) {
+        if (!value.coordinate) {
+            return true;
+        }
         var size = new OpenLayers.Size(25,25);
         var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
         var icon = new OpenLayers.Icon('images/hs-noinfo-marker.png', size, offset);
-        var lonLat = getPosition(value)
+        var lonLat = getPosition(value.coordinate)
         var marker = new OpenLayers.Marker(lonLat, icon);
         markersLayer.addMarker(marker);
         marker.events.register("click", marker, function (e) {
@@ -59,7 +61,10 @@ function loadMarker(map, data) {
 
     //display the nearest hackerspace
     $.each(hackerspaces, function(key, value){
-        var lonLat = getPosition(value);
+        if(!value.coordinate){
+            return true;
+        }
+        var lonLat = getPosition(value.coordinate);
         var d = distance(lonLat, center);
         if (d < min_dist) {
             min_dist = d;
@@ -148,7 +153,9 @@ function loadByHash(){
     var hash = window.location.hash;
     if(hash){
         var key = hash.split('#')[1];
-        populateData(key, hackerspaces[key]);
-        map.setCenter(getPosition(hackerspaces[key]), 13);
+        if (hackerspaces[key].coordinate) {
+            populateData(key, hackerspaces[key]);
+            map.setCenter(getPosition(hackerspaces[key].coordinate), 13);
+        }
     }
 }
