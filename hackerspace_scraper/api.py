@@ -17,7 +17,7 @@ BASE_URL = "http://hackerspaces.org"
 def absolute_url(path):
     return urljoin(BASE_URL, path)
 
-SWISS_HS = "/wiki/switzerland"
+SWISS_HS = "/wiki/france"
 HS_URL = absolute_url("w/index.php?title={0}&action=edit")
 LOCATION_KEY = "coordinate"
 LOGO_KEY = "logo"
@@ -66,25 +66,25 @@ def get_space_api_url(space_api, hackerspaces, name):
         print '%s has %s' % (name, url)
         return url
     else:
-        for i in space_api.values():
-            if re.match('%s.*'%hackerspaces[name]['site'], i):
-                print '%s has %s' % (name, i)
-                return i
-        try:
-            url = '%s/status.json' % hackerspaces[name]['site']
-            if not url.startswith('http'):
-                url = 'http://%s' % url
-            req = requests.get(url)
-            if req.status_code==200 and 'json' in req.headers['content-type']:
-                print '%s has %s' % (name, url)
-                return url
-            else:
-                print '%s has no spaceapi' % name
-        except Exception, e:
-            print e
+        if 'site' in hackerspaces[name]:
+            for i in space_api.values():
+                if re.match('%s.*'%hackerspaces[name]['site'], i):
+                    print '%s has %s' % (name, i)
+                    return i
+            try:
+                url = '%s/status.json' % hackerspaces[name]['site']
+                if not url.startswith('http'):
+                    url = 'http://%s' % url
+                req = requests.get(url)
+                if req.status_code==200 and 'json' in req.headers['content-type']:
+                    print '%s has %s' % (name, url)
+                    return url
+            except Exception, e:
+                print e
+        print '%s has no spaceapi' % name
 
 def get_hackerspace(name):
-    url = HS_URL.format(name)
+    url = HS_URL.format(name.encode('utf-8'))
     tree = get_etree(url)
 
     text_box = tree.xpath('//*[@id="wpTextbox1"]//text()')
