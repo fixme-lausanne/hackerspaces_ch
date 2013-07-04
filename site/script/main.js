@@ -15,6 +15,9 @@ function loadmap(){
         String.prototype.startsWith = function (str){
             return this.indexOf(str) == 0;
         };
+        String.prototype.capitalize = function(str) {
+            return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+        }
     }
 }
 
@@ -92,7 +95,7 @@ function populateData(key){
     dl.empty()
     $.each(hackerspaces[key], function(key, value){
         var dt = $('<dt>');
-        dt.text(key)
+        dt.text(key.capitalize())
         dl.append(dt);
 
         var dd = $('<dd>');
