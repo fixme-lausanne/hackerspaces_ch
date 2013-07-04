@@ -17,7 +17,7 @@ BASE_URL = "http://hackerspaces.org"
 def absolute_url(path):
     return urljoin(BASE_URL, path)
 
-SWISS_HS = "/wiki/france"
+SWISS_HS = "/wiki/switzerland"
 HS_URL = absolute_url("w/index.php?title={0}&action=edit")
 LOCATION_KEY = "coordinate"
 LOGO_KEY = "logo"
