@@ -12,7 +12,7 @@ file_path = os.path.join(os.path.dirname(os.path.dirname((os.path.abspath(__file
 
 class Hackerspaces(object):
     LOCATION_KEY = "coordinate"
-        LOGO_KEY = "logo"
+    LOGO_KEY = "logo"
     BASE_URL = "http://hackerspaces.org"
 
     @staticmethod
@@ -25,7 +25,7 @@ class Hackerspaces(object):
 
     @staticmethod
     def country_list(country, offset=0):
-        return "http://hackerspaces.org/w/api.php?action=ask&query=[[country::{0}]]&format=json&offset={1!s}".format(country, offset)
+        return "http://hackerspaces.org/w/api.php?action=ask&query=[[country::{0}]]\n[[Category:Hackerspace]]&format=json&offset={1!s}".format(country, offset)
 
     @staticmethod
     def edit_page(title):
@@ -81,17 +81,18 @@ class Hackerspaces(object):
         hackerspaces = {}
         while 1:
             hackerspaces_page = Hackerspaces.get_json(Hackerspaces.country_list(self.country, offset=offset))
+            print hackerspaces_page
             hackerspaces.update(hackerspaces_page['query']['results'])
-            if 'query-continue-offset' not in hackerspaces:
+            if 'query-continue-offset' in hackerspaces_page.keys():
+                offset =  int(hackerspaces_page['query-continue-offset'])
+            else:
+                print "END"
                 break
-            offset =  int(hackerspaces['query-continue-offset'])
 
         import IPython
         IPython.embed()
 
         hs_names = hackerspaces.keys()
-        #hs_names = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li//text()')
-        #links = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li/a/@href')
 
         hackerspaces = {}
         for name in hs_names:
@@ -112,7 +113,6 @@ class Hackerspaces(object):
     def get_hackerspace(self, name):
         url = Hackerspaces.edit_page(name)
         tree = self.get_etree(url)
-
         text_box = tree.xpath('//*[@id="wpTextbox1"]//text()')
         text = "".join(text_box)
 
@@ -160,7 +160,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 3:
         hackerspaces = Hackerspaces(sys.argv[1])
     else:
-        hackerspaces = Hackerspaces('Switzerland')
+        hackerspaces = Hackerspaces('Germany')
     with open(file_path, 'w') as f:
         hs = hackerspaces.get_hackerspaces()
         print(hs)
