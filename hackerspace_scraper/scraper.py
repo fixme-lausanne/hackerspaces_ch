@@ -24,15 +24,19 @@ class Hackerspaces(object):
         return urljoin(Hackerspaces.absolute_url('wiki/'), title)
 
     @staticmethod
+    def country_list(country, offset=0):
+        return "http://hackerspaces.org/w/api.php?action=ask&query=[[country::{0}]]&format=json&offset={1!s}".format(country, offset)
+
+    @staticmethod
     def edit_page(title):
-        url = Hackerspaces.absolute_url("w/index.php?title={0}&action=edit".format(title))
+        url = Hackerspaces.absolute_url(u"w/index.php?title={0}&action=edit".format(title))
         return url
 
     @staticmethod
     def url_for_file(filename):
         """Format the url 
         """
-        url = Hackerspaces.wiki_page('File') + ":{0}".format(filename)
+        url = Hackerspaces.wiki_page('File') + u":{0}".format(filename)
         tree = Hackerspaces.get_etree(url)
         url = tree.xpath('//a[@class="internal"]/@href')
         if len(url) == 1:
@@ -51,12 +55,16 @@ class Hackerspaces(object):
         #load the space api directory
 
 
+    @staticmethod
+    def get_json(url):
+        print(url)
+        resp = requests.get(url)
+        return resp.json()
 
     @staticmethod
     def get_etree(url, browser_dump=False):
         """Return a etree from an url using request
         """
-        print url
         resp = requests.get(url)
         if browser_dump:
             with open('dump', 'w') as f:
@@ -69,8 +77,20 @@ class Hackerspaces(object):
         return tree
 
     def get_hackerspaces(self):
-        tree = Hackerspaces.get_etree(Hackerspaces.wiki_page(self.country))
-        hs_names = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li//text()')
+        offset = 0
+        hackerspaces = {}
+        while 1:
+            hackerspaces_page = Hackerspaces.get_json(Hackerspaces.country_list(self.country, offset=offset))
+            hackerspaces.update(hackerspaces_page['query']['results'])
+            if 'query-continue-offset' not in hackerspaces:
+                break
+            offset =  int(hackerspaces['query-continue-offset'])
+
+        import IPython
+        IPython.embed()
+
+        hs_names = hackerspaces.keys()
+        #hs_names = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li//text()')
         #links = tree.xpath('//*[@id="mw-content-text"]/table[1]/tr[2]/td[1]/ul[1]/li/a/@href')
 
         hackerspaces = {}
@@ -140,7 +160,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 3:
         hackerspaces = Hackerspaces(sys.argv[1])
     else:
-        hackerspaces = Hackerspaces('switzerland')
+        hackerspaces = Hackerspaces('Switzerland')
     with open(file_path, 'w') as f:
         hs = hackerspaces.get_hackerspaces()
         print(hs)
