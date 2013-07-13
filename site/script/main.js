@@ -97,19 +97,49 @@ function populateData(key){
         var dt = $('<dt>');
         dt.text(key.capitalize())
         dl.append(dt);
-
         var dd = $('<dd>');
         if (typeof value == "string" && value.startsWith("http")) {
             var a = $('<a>')
             a.attr({'href': value})
             a.text(value)
             dd.append(a);
+        } else if(typeof value == "object") {
+            dd.append(getObject(value));
         } else {
-
             dd.text(value);
         }
         dl.append(dd)
     });
+}
+
+function getObject(obj) {
+    var dl = $('<dl>');
+    $.each(obj, function(key, value){
+        var dt = $('<dt>');
+        if (typeof key == "string"){
+            dt.text(key.capitalize());
+        } else if(typeof key == "number") {
+            dt.text(key);
+        }
+        dl.append(dt);
+        var dd = $('<dd>');
+        if (typeof value == "string" ) {
+            if (value.startsWith("http")) {
+                var a = $('<a>')
+                a.attr({'href': value})
+                a.text(value)
+                dd.append(a)
+            } else {
+                dd.text(value.capitalize());
+            }
+        } else if (typeof value == "number" ) {
+            dd.text(value);
+        } else if(typeof value == "object") {
+            dd.append(getObject(value));
+        }
+        dl.append(dd);
+    });
+    return dl;
 }
 
 function getSpaceApiData(key, url, marker) {
