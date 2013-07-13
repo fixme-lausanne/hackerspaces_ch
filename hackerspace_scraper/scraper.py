@@ -89,9 +89,6 @@ class Hackerspaces(object):
                 print "END"
                 break
 
-        import IPython
-        IPython.embed()
-
         hs_names = hackerspaces.keys()
 
         hackerspaces = {}
@@ -160,7 +157,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 3:
         hackerspaces = Hackerspaces(sys.argv[1])
     else:
-        hackerspaces = Hackerspaces('Germany')
+        hackerspaces = Hackerspaces('Switzerland')
     with open(file_path, 'w') as f:
         hs = hackerspaces.get_hackerspaces()
         print(hs)
