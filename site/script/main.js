@@ -15,9 +15,11 @@ function loadmap(){
         String.prototype.startsWith = function (str){
             return this.indexOf(str) == 0;
         };
+    }
+	if (typeof String.prototype.capitalize != 'function') {
         String.prototype.capitalize = function(str) {
             return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
-        }
+        };
     }
 }
 
