@@ -203,7 +203,7 @@ function createMenu(){
     });
     select.change(function() {
         var key = this.options[this.selectedIndex].value.split('#')[1];
-        populateData(key, data[key]);
+        populateData(key, hackerspaces[key]);
         map.setCenter(getPosition(data[key]), 13);
     });
 }
