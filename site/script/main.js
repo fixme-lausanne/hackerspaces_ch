@@ -204,7 +204,7 @@ function createMenu(){
     select.change(function() {
         var key = this.options[this.selectedIndex].value.split('#')[1];
         populateData(key, hackerspaces[key]);
-        map.setCenter(getPosition(hackerspaces[key]), 13);
+        map.setCenter(getPosition(hackerspaces[key].coordinate), 13);
     });
 }
 
