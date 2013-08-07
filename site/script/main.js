@@ -80,19 +80,92 @@ function loadMarker(map, data) {
     populateData(min_key, min_value);
 }
 
-function populateData(key){
-    var hsdata = $('#hsdata');
-    $("#hsname").text(key);
+function createDataBlock(title, data){
+    block = $('<div>');
+    block.addClass('one-third');
+    titleh = $('<h4>');
+    titleh.addClass('heading');
+    titleh.text(title);
+    block.append(titleh);
+    var dl = $('<dl>');
+    $.each(data, function(key, value){
+        if(key==undefined || value==undefined){
+            //return 1;
+        }
+        var dt = $('<dt>');
+        dt.text(key);
+        dl.append(dt);
+        var dd = $('<dd>');
+        if (typeof value == "string" && value.startsWith("http")) {
+            var a = $('<a>')
+            a.attr({'href': value})
+            a.text(value)
+            dd.append(a);
+        } else {
+            dd.text(value);
+        }
+        dl.append(dd);
+    });
+    block.append(dl);
+    return block;
+}
 
-    var logo = hackerspaces[key].logo
-    var logo_img = hsdata.find('#hslogo')
-    if (logo) {
-        logo_img.attr('src', logo);
-        logo_img.show()
-    } else {
-        logo_img.attr('src', null)
-        logo_img.hide()
+function populateData(key){
+    var hs = hackerspaces[key];
+    $("#hsname").text(key);
+    var hsdata = $('#page-content');
+    hsdata.empty();
+
+    // Important data
+    var block, title, data;
+    if(hs['status'] && hs['lastchange']){
+        hsdata.append(createDataBlock('Status', {
+            'Status': hs['status'],
+            'Last change': hs['lastchange'],
+        }));
     }
+    if(hs['address']){
+        data = {
+            'Address': hs['address'],
+            'GPS': hs['lon'] + ',' + hs['lat'],
+        };
+    } else {
+        data = {
+            'Address': hs['street-address'] + ', ' + hs['postalcode'] + ', ' + hs['city'],
+            'GPS': hs['coordinate'][1] + ',' + hs['coordinate'][0],
+        };
+    }
+    hsdata.append(createDataBlock('Localisation', data));
+
+    if(hs.logo){
+        var block_img = $('<div>');
+        block_img.addClass('thumb one-third last');
+        hsdata.append(block_img);
+        var logo_img = $('<img>');
+        //logo_img.height('150px');
+        block_img.append(logo_img);
+        logo_img.attr('src', hs.logo);
+        logo_img.show();
+    }
+
+    hsdata.append($('<div>').addClass('clearfix'));
+    if (hs['contact']) {
+        hsdata.append(createDataBlock('Contact', {
+            'Phone': hs['contact']['phone'],
+            'Twiter': hs['contact']['twitter'],
+            'IRC': hs['contact']['irc'],
+            'Email': hs['contact']['email'],
+            'Mailing-List': hs['contact']['ml'],
+        }));
+        hsdata.append($('<div>').addClass('clearfix'));
+    }
+    //hsdata.append(createDataBlock('Flux', {
+    //}));
+    //hsdata.append($('<div>').addClass('clearfix'));
+
+    // All other data
+
+    /*
     var dl = hsdata.children('dl');
     dl.empty()
     $.each(hackerspaces[key], function(key, value){
@@ -112,13 +185,12 @@ function populateData(key){
         }
         dl.append(dd)
     });
+    */
 
 
     // Update Nav
     $('#nav a').removeClass('active');
     $('#nav a[href="#'+ key +'"]').addClass('active');
-
-    // Update comboNav
     $('#comboNav').val('#' + key);
 }
 
