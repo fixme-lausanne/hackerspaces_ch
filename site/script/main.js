@@ -18,6 +18,7 @@ function loadmap(){
     }
 	if (typeof String.prototype.capitalize != 'function') {
         String.prototype.capitalize = function(str) {
+            // TODO: Trim spaces
             return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
         };
     }
@@ -87,26 +88,7 @@ function createDataBlock(title, data){
     titleh.addClass('heading');
     titleh.text(title);
     block.append(titleh);
-    var dl = $('<dl>');
-    $.each(data, function(key, value){
-        if(key==undefined || value==undefined){
-            //return 1;
-        }
-        var dt = $('<dt>');
-        dt.text(key);
-        dl.append(dt);
-        var dd = $('<dd>');
-        if (typeof value == "string" && value.startsWith("http")) {
-            var a = $('<a>')
-            a.attr({'href': value})
-            a.text(value)
-            dd.append(a);
-        } else {
-            dd.text(value);
-        }
-        dl.append(dd);
-    });
-    block.append(dl);
+    block.append(getObject(data));
     return block;
 }
 
@@ -116,77 +98,83 @@ function populateData(key){
     var hsdata = $('#page-content');
     hsdata.empty();
 
-    // Important data
+    // Information
     var block, title, data;
+    hsdata.append(createDataBlock('Information', {
+            'Size': hs['size'],
+            'Membercount': hs['membercount'],
+            'Fee': hs['fee'],
+            'Founded': hs['founding'],
+    }));
+
+    // Status
     if(hs['status'] && hs['lastchange']){
         hsdata.append(createDataBlock('Status', {
             'Status': hs['status'],
             'Last change': hs['lastchange'],
         }));
     }
+
+    // Localisation
+    data = {};
     if(hs['address']){
-        data = {
-            'Address': hs['address'],
-            'GPS': hs['lon'] + ',' + hs['lat'],
-        };
-    } else {
-        data = {
-            'Address': hs['street-address'] + ', ' + hs['postalcode'] + ', ' + hs['city'],
-            'GPS': hs['coordinate'][1] + ',' + hs['coordinate'][0],
-        };
+        data['Address'] = hs['address'];
+    } else if (hs['street-address'] && hs['postalcode'] && hs['city']){
+        data['Address'] = hs['street-address'].capitalize() + ', ' +
+            hs['postalcode'] + ' ' + hs['city'].capitalize();
+    } else if(hs['city']) {
+        data['Address'] = hs['city'].capitalize();
+    }
+    if (hs['coordinate']){
+        data['GPS'] = hs['coordinate'][1] + ',' + hs['coordinate'][0];
+    } else if(hs['lon'] && hs['lat']) {
+        data['GPS'] = hs['lon'] + ',' + hs['lat'];
     }
     hsdata.append(createDataBlock('Localisation', data));
 
+    // Logo
     if(hs.logo){
         var block_img = $('<div>');
         block_img.addClass('thumb one-third last');
         hsdata.append(block_img);
         var logo_img = $('<img>');
-        //logo_img.height('150px');
         block_img.append(logo_img);
         logo_img.attr('src', hs.logo);
         logo_img.show();
     }
 
-    hsdata.append($('<div>').addClass('clearfix'));
+    hsdata.append($('<div>').addClass('clearfix')); // CLEAR
+
+    // Web sites
+    hsdata.append(createDataBlock('Web', {
+        'Website': hs['site'],
+        'Wiki': hs['wiki'],
+    }));
+    // Contact
+    data = {
+        'Phone': hs['phone'],
+        'Email': hs['email'],
+        'Mailing-List': hs['maillist'],
+        'Jabber': hs['jabber'],
+    };
     if (hs['contact']) {
-        hsdata.append(createDataBlock('Contact', {
-            'Phone': hs['contact']['phone'],
-            'Twiter': hs['contact']['twitter'],
-            'IRC': hs['contact']['irc'],
-            'Email': hs['contact']['email'],
-            'Mailing-List': hs['contact']['ml'],
-        }));
-        hsdata.append($('<div>').addClass('clearfix'));
+        data['Phone'] = hs['contact']['phone'];
+        data['IRC'] = hs['contact']['irc'];
+        data['Email'] = hs['contact']['email'];
+        data['Mailing-List'] = hs['contact']['ml'];
     }
-    //hsdata.append(createDataBlock('Flux', {
-    //}));
-    //hsdata.append($('<div>').addClass('clearfix'));
+    hsdata.append(createDataBlock('Contact',data));
 
-    // All other data
-
-    /*
-    var dl = hsdata.children('dl');
-    dl.empty()
-    $.each(hackerspaces[key], function(key, value){
-        var dt = $('<dt>');
-        dt.text(key.capitalize())
-        dl.append(dt);
-        var dd = $('<dd>');
-        if (typeof value == "string" && value.startsWith("http")) {
-            var a = $('<a>')
-            a.attr({'href': value})
-            a.text(value)
-            dd.append(a);
-        } else if(typeof value == "object") {
-            dd.append(getObject(value));
-        } else {
-            dd.text(value);
-        }
-        dl.append(dd)
-    });
-    */
-
+    // Social networks
+    data = {};
+    if (hs['contact']) {
+        hsdata.append(createDataBlock('Social', {
+            'Twiter': hs['contact']['twitter'],
+            'Facebook': hs['contact']['facebook'],
+            'Google+': hs['contact']['googleplus'],
+        }));
+        hsdata.append($('<div>').addClass('clearfix')); // CLEAR
+    }
 
     // Update Nav
     $('#nav a').removeClass('active');
@@ -195,38 +183,42 @@ function populateData(key){
 }
 
 function getObject(obj) {
-    var dl = $('<dl>');
+    var ul = $('<ul>');
     $.each(obj, function(key, value){
-        var dt = $('<dt>');
-        if (typeof key == "string"){
-            dt.text(key.capitalize());
-        } else if(typeof key == "number") {
-            dt.text(key);
+        if (!key || !value){
+            return 1;
         }
-        dl.append(dt);
-        var dd = $('<dd>');
+        var li = $('<li>');
+        var label = $('<label>');
+        if (typeof key == "string"){
+            label.text(key.capitalize());
+        } else if(typeof key == "number") {
+            label.text(key);
+        }
+        li.append(label);
+        var span = $('<span>');
         if (typeof value == "string" ) {
             if (value.startsWith("http")) {
                 var a = $('<a>')
                 a.attr({'href': value})
                 a.text(value)
-                dd.append(a)
+                span.append(a)
             } else {
-                dd.text(value.capitalize());
+                span.text(value.capitalize());
             }
         } else if (typeof value == "number" ) {
-            dd.text(value);
+            span.text(value);
         } else if(typeof value == "object") {
-            dd.append(getObject(value));
+            span.append(getObject(value));
         }
-        dl.append(dd);
+        li.append(span);
+        ul.append(li);
     });
-    return dl;
+    return ul;
 }
 
 function getSpaceApiData(key, url, marker) {
     if (!url) {
-        console.log(key + ' has no spaceapi');
         return;
     }
     $.getJSON(url, function(space_api) {
