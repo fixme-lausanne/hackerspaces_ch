@@ -920,4 +920,13 @@ footer .wrapper{
     font-weight: bold;
 }
 
+.img-logo {
+    max-width: 95%;
+    max-height: 100px;
+}
+
+.img-logo-container {
+    text-align: center;
+    margin: 0 auto;
+}
 

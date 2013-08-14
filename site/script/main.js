@@ -81,9 +81,10 @@ function loadMarker(map, data) {
     populateData(min_key, min_value);
 }
 
-function createDataBlock(title, data){
+function createDataBlock(title, data, cls){
     block = $('<div>');
     block.addClass('one-third');
+    block.addClass(cls);
     titleh = $('<h4>');
     titleh.addClass('heading');
     titleh.text(title);
@@ -98,22 +99,49 @@ function populateData(key){
     var hsdata = $('#page-content');
     hsdata.empty();
 
+    // Logo
+    if(hs.logo){
+        var block_img = $('<div>');
+        block_img.addClass('one-third last img-logo-container');
+        hsdata.append(block_img);
+        var logo_img = $('<img>');
+        logo_img.addClass('img-logo');
+        logo_img.height('120px');
+        block_img.append(logo_img);
+        logo_img.attr('src', hs.logo);
+        logo_img.show();
+    }
+
+    // Contact
+    data = {
+        'Phone': hs['phone'],
+        'Email': hs['email'],
+        'Mailing-List': hs['maillist'],
+        'Jabber': hs['jabber'],
+    };
+    if (hs['contact']) {
+        data['Phone'] = hs['contact']['phone'];
+        data['IRC'] = hs['contact']['irc'];
+        data['Email'] = hs['contact']['email'];
+        data['Mailing-List'] = hs['contact']['ml'];
+        data['Twiter'] = hs['contact']['twitter'];
+        data['Facebook'] = hs['contact']['facebook'];
+        data['Google+'] = hs['contact']['googleplus'];
+    }
+    hsdata.append(createDataBlock('Contact',data,'last'));
+
     // Information
     var block, title, data;
     hsdata.append(createDataBlock('Information', {
+            'Website': hs['site'],
+            'Wiki': hs['wiki'],
             'Size': hs['size'],
             'Membercount': hs['membercount'],
             'Fee': hs['fee'],
             'Founded': hs['founding'],
     }));
 
-    // Status
-    if(hs['status'] && hs['lastchange']){
-        hsdata.append(createDataBlock('Status', {
-            'Status': hs['status'],
-            'Last change': hs['lastchange'],
-        }));
-    }
+    hsdata.append($('<div>').addClass('clearfix')); // CLEAR
 
     // Localisation
     data = {};
@@ -132,49 +160,15 @@ function populateData(key){
     }
     hsdata.append(createDataBlock('Localisation', data));
 
-    // Logo
-    if(hs.logo){
-        var block_img = $('<div>');
-        block_img.addClass('thumb one-third last');
-        hsdata.append(block_img);
-        var logo_img = $('<img>');
-        block_img.append(logo_img);
-        logo_img.attr('src', hs.logo);
-        logo_img.show();
+    // Status
+    if(hs['status'] && hs['lastchange']){
+        hsdata.append(createDataBlock('Status', {
+            'Status': hs['status'],
+            'Last change': hs['lastchange'],
+        }));
     }
 
     hsdata.append($('<div>').addClass('clearfix')); // CLEAR
-
-    // Web sites
-    hsdata.append(createDataBlock('Web', {
-        'Website': hs['site'],
-        'Wiki': hs['wiki'],
-    }));
-    // Contact
-    data = {
-        'Phone': hs['phone'],
-        'Email': hs['email'],
-        'Mailing-List': hs['maillist'],
-        'Jabber': hs['jabber'],
-    };
-    if (hs['contact']) {
-        data['Phone'] = hs['contact']['phone'];
-        data['IRC'] = hs['contact']['irc'];
-        data['Email'] = hs['contact']['email'];
-        data['Mailing-List'] = hs['contact']['ml'];
-    }
-    hsdata.append(createDataBlock('Contact',data));
-
-    // Social networks
-    data = {};
-    if (hs['contact']) {
-        hsdata.append(createDataBlock('Social', {
-            'Twiter': hs['contact']['twitter'],
-            'Facebook': hs['contact']['facebook'],
-            'Google+': hs['contact']['googleplus'],
-        }));
-        hsdata.append($('<div>').addClass('clearfix')); // CLEAR
-    }
 
     // Update Nav
     $('#nav a').removeClass('active');
