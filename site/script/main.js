@@ -66,19 +66,19 @@ function loadMarker(map, data) {
     var min_dist = 100000000;
 
     //display the nearest hackerspace
-    $.each(hackerspaces, function(key, value){
-        if(!value.coordinate){
-            return true;
-        }
-        var lonLat = getPosition(value.coordinate);
-        var d = distance(lonLat, center);
-        if (d < min_dist) {
-            min_dist = d;
-            min_value = value;
-            min_key = key;
-        }
-    });
-    populateData(min_key, min_value);
+    //$.each(hackerspaces, function(key, value){
+    //    if(!value.coordinate){
+    //        return true;
+    //    }
+    //    var lonLat = getPosition(value.coordinate);
+    //    var d = distance(lonLat, center);
+    //    if (d < min_dist) {
+    //        min_dist = d;
+    //        min_value = value;
+    //        min_key = key;
+    //    }
+    //});
+    //populateData(min_key, min_value);
 }
 
 function createDataBlock(title, data, cls){
