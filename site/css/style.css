@@ -921,12 +921,14 @@ footer .wrapper{
 }
 
 .img-logo {
-    max-width: 95%;
-    max-height: 100px;
+    max-width: 90%;
+    max-height: 120px;
 }
 
 .img-logo-container {
     text-align: center;
-    margin: 0 auto;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
 }
 

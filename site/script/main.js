@@ -105,7 +105,6 @@ function populateData(key){
     hsdata.append(block_img);
     var logo_img = $('<img>');
     logo_img.addClass('img-logo');
-    logo_img.height('120px');
     block_img.append(logo_img);
     if(hs.logo){
         logo_img.attr('src', hs.logo);
