@@ -100,16 +100,17 @@ function populateData(key){
     hsdata.empty();
 
     // Logo
+    var block_img = $('<div>');
+    block_img.addClass('one-third last img-logo-container');
+    hsdata.append(block_img);
+    var logo_img = $('<img>');
+    logo_img.addClass('img-logo');
+    logo_img.height('120px');
+    block_img.append(logo_img);
     if(hs.logo){
-        var block_img = $('<div>');
-        block_img.addClass('one-third last img-logo-container');
-        hsdata.append(block_img);
-        var logo_img = $('<img>');
-        logo_img.addClass('img-logo');
-        logo_img.height('120px');
-        block_img.append(logo_img);
         logo_img.attr('src', hs.logo);
-        logo_img.show();
+    } else {
+        logo_img.attr('src', '/img/nologo.png');
     }
 
     // Contact
