@@ -196,7 +196,15 @@ function getObject(obj) {
             if (value.startsWith("http")) {
                 var a = $('<a>')
                 a.attr({'href': value})
-                a.text(value)
+                value = value.replace('http://www.', '');
+                value = value.replace('https://www.', '');
+                value = value.replace('http://', '');
+                value = value.replace('https://', '');
+                if(value.length > 28){
+                    a.text(value.substring(0, 18) + '..' + value.substr(-8, 8));
+                } else {
+                    a.text(value)
+                }
                 span.append(a)
             } else {
                 span.text(value.capitalize());
