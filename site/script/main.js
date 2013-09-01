@@ -16,7 +16,7 @@ function loadmap(){
             return this.indexOf(str) == 0;
         };
     }
-	if (typeof String.prototype.capitalize != 'function') {
+    if (typeof String.prototype.capitalize != 'function') {
         String.prototype.capitalize = function(str) {
             // TODO: Trim spaces
             return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
