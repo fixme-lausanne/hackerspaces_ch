@@ -10,17 +10,15 @@ function loadmap(){
         loadMarker(map);
         createMenu();
     });
-    if (typeof String.prototype.startsWith != 'function') {
-       //see below for better implementation!
-        String.prototype.startsWith = function (str){
-            return this.indexOf(str) == 0;
-        };
-        String.prototype.capitalize = function(str) {
-            return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
-        }
-    }
 }
 
+function startsWith(str, match) {
+    return str.slice(0, match.length) == match;
+}
+
+function capitalize(str){
+    return str.charAt(0).toUpperCase() + str.slice(1)
+}
 function createIcon(image_path) {
         var size = new OpenLayers.Size(21,25);
         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
@@ -95,10 +93,10 @@ function populateData(key){
     dl.empty()
     $.each(hackerspaces[key], function(key, value){
         var dt = $('<dt>');
-        dt.text(key.capitalize())
+        dt.text(capitalize(key))
         dl.append(dt);
         var dd = $('<dd>');
-        if (typeof value == "string" && value.startsWith("http")) {
+        if (typeof value == "string" && startsWith(value, "http")) {
             var a = $('<a>')
             a.attr({'href': value})
             a.text(value)
@@ -117,20 +115,20 @@ function getObject(obj) {
     $.each(obj, function(key, value){
         var dt = $('<dt>');
         if (typeof key == "string"){
-            dt.text(key.capitalize());
+            dt.text(capitalize(key));
         } else if(typeof key == "number") {
             dt.text(key);
         }
         dl.append(dt);
         var dd = $('<dd>');
         if (typeof value == "string" ) {
-            if (value.startsWith("http")) {
+            if (startsWith(value, "http")) {
                 var a = $('<a>')
                 a.attr({'href': value})
                 a.text(value)
                 dd.append(a)
             } else {
-                dd.text(value.capitalize());
+                dd.text(capitalize(value));
             }
         } else if (typeof value == "number" ) {
             dd.text(value);
