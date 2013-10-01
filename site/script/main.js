@@ -20,17 +20,17 @@ function capitalize(str){
     return str.charAt(0).toUpperCase() + str.slice(1)
 }
 function createIcon(image_path) {
-        var size = new OpenLayers.Size(21,25);
-        var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
-        var icon = new OpenLayers.Icon(image_path, size, offset);
-        return icon;
+    var size = new OpenLayers.Size(21,25);
+    var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+    var icon = new OpenLayers.Icon(image_path, size, offset);
+    return icon;
 }
 
 function getPosition(position){
     var lonLat = new OpenLayers.LonLat(position[1],position[0])
         .transform(
-           new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-           map.getProjectionObject()); // to Spherical Mercator Projection
+        new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+        map.getProjectionObject()); // to Spherical Mercator Projection
     return lonLat;
 }
 
@@ -43,7 +43,7 @@ function loadMarker(map, data) {
         }
         var size = new OpenLayers.Size(25,25);
         var offset = new OpenLayers.Pixel(-(size.w/2), -(size.h/2));
-        var icon = new OpenLayers.Icon('images/hs-noinfo-marker.png', size, offset);
+        var icon = new OpenLayers.Icon('img/hs-noinfo-marker.png', size, offset);
         var lonLat = getPosition(value.coordinate)
         var marker = new OpenLayers.Marker(lonLat, icon);
         markersLayer.addMarker(marker);
@@ -61,97 +61,170 @@ function loadMarker(map, data) {
     var min_dist = 100000000;
 
     //display the nearest hackerspace
-    $.each(hackerspaces, function(key, value){
-        if(!value.coordinate){
-            return true;
-        }
-        var lonLat = getPosition(value.coordinate);
-        var d = distance(lonLat, center);
-        if (d < min_dist) {
-            min_dist = d;
-            min_value = value;
-            min_key = key;
-        }
-        });
-    populateData(min_key, min_value);
+    //$.each(hackerspaces, function(key, value){
+    //    if(!value.coordinate){
+    //        return true;
+    //    }
+    //    var lonLat = getPosition(value.coordinate);
+    //    var d = distance(lonLat, center);
+    //    if (d < min_dist) {
+    //        min_dist = d;
+    //        min_value = value;
+    //        min_key = key;
+    //    }
+    //});
+    //populateData(min_key, min_value);
+}
+
+function createDataBlock(title, data, cls){
+    block = $('<div>');
+    block.addClass('one-third');
+    block.addClass(cls);
+    titleh = $('<h4>');
+    titleh.addClass('heading');
+    titleh.text(title);
+    block.append(titleh);
+    block.append(getObject(data));
+    return block;
 }
 
 function populateData(key){
-    var hsdata = $('#hsdata');
+    var hs = hackerspaces[key];
     $("#hsname").text(key);
+    var hsdata = $('#page-content');
+    hsdata.empty();
 
-    var logo = hackerspaces[key].logo
-    var logo_img = hsdata.find('#hslogo')
-    if (logo) {
-        logo_img.attr('src', logo);
-        logo_img.show()
+    // Logo
+    var block_img = $('<div>');
+    block_img.addClass('one-third last img-logo-container');
+    hsdata.append(block_img);
+    var logo_img = $('<img>');
+    logo_img.addClass('img-logo');
+    block_img.append(logo_img);
+    if(hs.logo){
+        logo_img.attr('src', hs.logo);
     } else {
-        logo_img.attr('src', null)
-        logo_img.hide()
+        logo_img.attr('src', '/img/nologo.png');
     }
-    var dl = hsdata.children('dl');
-    dl.empty()
-    $.each(hackerspaces[key], function(key, value){
-        var dt = $('<dt>');
-        dt.text(capitalize(key))
-        dl.append(dt);
-        var dd = $('<dd>');
-        if (typeof value == "string" && startsWith(value, "http")) {
-            var a = $('<a>')
-            a.attr({'href': value})
-            a.text(value)
-            dd.append(a);
-        } else if(typeof value == "object") {
-            dd.append(getObject(value));
-        } else {
-            dd.text(value);
-        }
-        dl.append(dd)
-    });
+
+    // Contact
+    data = {
+        'Phone': hs['phone'],
+        'Email': hs['email'],
+        'Mailing-List': hs['maillist'],
+        'Jabber': hs['jabber'],
+    };
+    if (hs['contact']) {
+        data['Phone'] = hs['contact']['phone'];
+        data['IRC'] = hs['contact']['irc'];
+        data['Email'] = hs['contact']['email'];
+        data['Mailing-List'] = hs['contact']['ml'];
+        data['Twiter'] = hs['contact']['twitter'];
+        data['Facebook'] = hs['contact']['facebook'];
+        data['Google+'] = hs['contact']['googleplus'];
+    }
+    hsdata.append(createDataBlock('Contact',data,'last'));
+
+    // Information
+    var block, title, data;
+    hsdata.append(createDataBlock('Information', {
+            'Website': hs['site'],
+            'Wiki': hs['wiki'],
+            'Size': hs['size'],
+            'Membercount': hs['membercount'],
+            'Fee': hs['fee'],
+            'Founded': hs['founding'],
+    }));
+
+    hsdata.append($('<div>').addClass('clearfix')); // CLEAR
+
+    // Localisation
+    data = {};
+    if(hs['address']){
+        data['Address'] = hs['address'];
+    } else if (hs['street-address'] && hs['postalcode'] && hs['city']){
+        data['Address'] = capitalize(hs['street-address']) + ', ' +
+            hs['postalcode'] + ' ' + capitalize(hs['city']);
+    } else if(hs['city']) {
+        data['Address'] = capitalize(hs['city']);
+    }
+    if (hs['coordinate']){
+        data['GPS'] = hs['coordinate'][1] + ',' + hs['coordinate'][0];
+    } else if(hs['lon'] && hs['lat']) {
+        data['GPS'] = hs['lon'] + ',' + hs['lat'];
+    }
+    hsdata.append(createDataBlock('Localisation', data));
+
+    // Status
+    if(hs['status'] && hs['lastchange']){
+        hsdata.append(createDataBlock('Status', {
+            'Status': hs['status'],
+            'Last change': hs['lastchange'],
+        }));
+    }
+
+    hsdata.append($('<div>').addClass('clearfix')); // CLEAR
+
+    // Update Nav
+    $('#nav a').removeClass('active');
+    $('#nav a[href="#'+ key +'"]').addClass('active');
+    $('#comboNav').val('#' + key);
 }
 
 function getObject(obj) {
-    var dl = $('<dl>');
+    var ul = $('<ul>');
     $.each(obj, function(key, value){
-        var dt = $('<dt>');
-        if (typeof key == "string"){
-            dt.text(capitalize(key));
-        } else if(typeof key == "number") {
-            dt.text(key);
+        if (!key || !value){
+            return 1;
         }
-        dl.append(dt);
-        var dd = $('<dd>');
+        var li = $('<li>');
+        var label = $('<label>');
+        if (typeof key == "string"){
+            label.text(capitalize(key));
+        } else if(typeof key == "number") {
+            label.text(key);
+        }
+        li.append(label);
+        var span = $('<span>');
         if (typeof value == "string" ) {
             if (startsWith(value, "http")) {
                 var a = $('<a>')
                 a.attr({'href': value})
-                a.text(value)
-                dd.append(a)
+                value = value.replace('http://www.', '');
+                value = value.replace('https://www.', '');
+                value = value.replace('http://', '');
+                value = value.replace('https://', '');
+                if(value.length > 28){
+                    a.text(value.substring(0, 18) + '..' + value.substr(-8, 8));
+                } else {
+                    a.text(value)
+                }
+                span.append(a)
             } else {
-                dd.text(capitalize(value));
+                span.text(capitalize(value));
             }
         } else if (typeof value == "number" ) {
-            dd.text(value);
+            span.text(value);
         } else if(typeof value == "object") {
-            dd.append(getObject(value));
+            span.append(getObject(value));
         }
-        dl.append(dd);
+        li.append(span);
+        ul.append(li);
     });
-    return dl;
+    return ul;
 }
 
 function getSpaceApiData(key, url, marker) {
     if (!url) {
-        console.log(key + ' has no spaceapi');
         return;
     }
     $.getJSON(url, function(space_api) {
         //set the status icon
         var open = space_api.open;
         if (open === true) {
-            marker.setUrl('images/hs-open-marker.png');
+            marker.setUrl('img/hs-open-marker.png');
         } else if (open === false) {
-            marker.setUrl('images/hs-closed-marker.png');
+            marker.setUrl('img/hs-closed-marker.png');
         }
         // Merge SpaceApi data
         $.each(space_api, function(k, v){
@@ -163,10 +236,12 @@ function getSpaceApiData(key, url, marker) {
 }
 
 function createMenu(){
-    var menu = $('#hslist');
+    var menu = $('#nav');
+    var select = $('#comboNav');
     var ul = $('<ul>');
     menu.children().replaceWith(ul);
     $.each(hackerspaces, function(k, v){
+        // Link menu
         var a = $('<a>');
         a.attr({'href': '#'+k})
         a.click(function(){
@@ -177,6 +252,20 @@ function createMenu(){
         var li = $('<li>');
         li.append(a);
         ul.append(li);
+
+        // Option combo nav
+        var o = $('<option>');
+        o.attr({'value': '#'+k}).text(k);
+        o.click(function(){
+            populateData(k, v);
+            map.setCenter(getPosition(v), 13);
+        });
+        select.append(o);
+    });
+    select.change(function() {
+        var key = this.options[this.selectedIndex].value.split('#')[1];
+        populateData(key, hackerspaces[key]);
+        map.setCenter(getPosition(hackerspaces[key].coordinate), 13);
     });
 }
 
