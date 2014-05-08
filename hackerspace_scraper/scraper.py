@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 from lxml import etree
 from urlparse import urljoin
 import io
@@ -34,7 +35,7 @@ class Hackerspaces(object):
 
     @staticmethod
     def url_for_file(filename):
-        """Format the url 
+        """Format the url
         """
         url = Hackerspaces.wiki_page('File') + u":{0}".format(filename)
         tree = Hackerspaces.get_etree(url)
@@ -42,7 +43,7 @@ class Hackerspaces(object):
         if len(url) == 1:
             return url[0]
 
-    #regex matching all the non numeric character including 
+    #regex matching all the non numeric character including
     NON_NUMERIC = re.compile('[^,\d.]+')
 
     #url used to fetch information about the space api
