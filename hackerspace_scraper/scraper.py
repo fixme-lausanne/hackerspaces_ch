@@ -14,7 +14,7 @@ file_path = os.path.join(os.path.dirname(os.path.dirname((os.path.abspath(__file
 class Hackerspaces(object):
     LOCATION_KEY = "coordinate"
     LOGO_KEY = "logo"
-    BASE_URL = "http://hackerspaces.org"
+    BASE_URL = "https://wiki.hackerspaces.org"
 
     @staticmethod
     def absolute_url(path):
@@ -22,15 +22,15 @@ class Hackerspaces(object):
 
     @staticmethod
     def wiki_page(title):
-        return urljoin(Hackerspaces.absolute_url('wiki/'), title)
+        return urljoin(Hackerspaces.absolute_url('/'), title)
 
     @staticmethod
     def country_list(country, offset=0):
-        return "http://hackerspaces.org/w/api.php?action=ask&query=[[country::{0}]]\n[[Category:Hackerspace]]&format=json&offset={1!s}".format(country, offset)
+        return "https://wiki.hackerspaces.org/w/api.php?action=ask&query=[[country::{0}]][[Category:Hackerspace]]&format=json&offset={1!s}".format(country, offset)
 
     @staticmethod
     def edit_page(title):
-        url = Hackerspaces.absolute_url(u"w/index.php?title={0}&action=edit".format(title))
+        url = Hackerspaces.absolute_url(u"/w/index.php?title={0}&action=edit".format(title))
         return url
 
     @staticmethod
@@ -59,13 +59,16 @@ class Hackerspaces(object):
     @staticmethod
     def get_json(url):
         print(url)
+        print("https://wiki.hackerspaces.org/w/api.php?action=ask&query=[[country::Switzerland]][[Category:Hackerspace]]&format=json&offset=0")
         resp = requests.get(url)
+        #print(resp.content)
         return resp.json()
 
     @staticmethod
     def get_etree(url, browser_dump=False):
         """Return a etree from an url using request
         """
+        print(url)
         resp = requests.get(url)
         if browser_dump:
             with open('dump', 'w') as f:
